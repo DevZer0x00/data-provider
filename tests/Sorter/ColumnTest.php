@@ -24,16 +24,12 @@ class ColumnTest extends TestCase
         $this->assertNull($column->getDirection());
 
         $column->setDirection(Sorter::SORT_DESC);
+
+        $this->assertTrue($column->isSorted());
         $this->assertEquals(Sorter::SORT_DESC, $column->getDirection());
 
         $column->setDirection(Sorter::SORT_ASC);
         $this->assertEquals(Sorter::SORT_ASC, $column->getDirection());
-    }
-
-    public function testInvalidDefaultDirection()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new Column('test', [], 'test');
     }
 
     public function testInvalidSetDirection()
@@ -49,10 +45,10 @@ class ColumnTest extends TestCase
         $column = new Column('test');
 
         $column->setDirection(Sorter::SORT_ASC);
-        $this->assertEquals(['test' => Sorter::SORT_ASC], $column->getOrderFields());
+        $this->assertEquals(['test' => Sorter::SORT_ASC], $column->getOrderByFields());
 
         $column->setDirection(Sorter::SORT_DESC);
-        $this->assertEquals(['test' => Sorter::SORT_DESC], $column->getOrderFields());
+        $this->assertEquals(['test' => Sorter::SORT_DESC], $column->getOrderByFields());
     }
 
     public function testOrderMultipleFieldsSettings()
@@ -77,7 +73,7 @@ class ColumnTest extends TestCase
             'field3' => Sorter::SORT_ASC
         ];
 
-        $this->assertEquals($asc, $column->getOrderFields());
+        $this->assertEquals($asc, $column->getOrderByFields());
 
         $column->setDirection(Sorter::SORT_DESC);
         $desc = [
@@ -85,7 +81,7 @@ class ColumnTest extends TestCase
             'field2' => Sorter::SORT_ASC,
             'field4' => Sorter::SORT_DESC
         ];
-        $this->assertEquals($desc, $column->getOrderFields());
+        $this->assertEquals($desc, $column->getOrderByFields());
     }
 
     /**

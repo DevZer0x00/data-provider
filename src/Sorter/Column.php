@@ -13,23 +13,14 @@ class Column
 
     private array $orderSettings;
 
-    private ?string $defaultDirection;
-
-    private ?string $direction;
+    private ?string $direction = null;
 
     public function __construct(
         string $name,
-        array $orderSettings = [],
-        ?string $defaultDirection = null
+        array $orderSettings = []
     ) {
-        if ($defaultDirection !== null) {
-            $this->validateDirection($defaultDirection);
-        }
-
         $this->name = $name;
         $this->orderSettings = $this->prepareOrderSettings($orderSettings);
-        $this->defaultDirection = $defaultDirection;
-        $this->direction = $defaultDirection;
     }
 
     /**
@@ -40,6 +31,11 @@ class Column
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function isSorted() : bool
+    {
+        return !is_null($this->getDirection());
     }
 
     /**
@@ -58,7 +54,7 @@ class Column
      *
      * @return array|null Return ["field1" => Sorter::SORT_DESC, "field2" => Sorter::SORT_ASC ...]
      */
-    public function getOrderFields(): ?array
+    public function getOrderByFields(): ?array
     {
         $direction = $this->getDirection();
 
@@ -72,14 +68,16 @@ class Column
     /**
      * Устанавливает направление сортировки
      *
-     * @param string $direction
+     * @param string|null $direction
      * @return $this
      *
      * @throws InvalidArgumentException
      */
-    public function setDirection(string $direction): Column
+    public function setDirection(?string $direction): Column
     {
-        $this->validateDirection($direction);
+        if ($direction !== null) {
+            $this->validateDirection($direction);
+        }
 
         $this->direction = $direction;
 
