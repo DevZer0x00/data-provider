@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DevZer0x00\DataProvider\Traits;
 
 use DevZer0x00\DataProvider\Exception\ConfigException;

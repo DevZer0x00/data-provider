@@ -6,9 +6,13 @@ namespace DevZer0x00\DataProvider\Sorter;
 
 use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Sorter;
+use DevZer0x00\DataProvider\Traits\ObserverableTrait;
+use SplSubject;
 
-class Column
+class Column implements SplSubject
 {
+    use ObserverableTrait;
+
     private string $name;
 
     private array $orderSettings;
@@ -77,6 +81,10 @@ class Column
     {
         if ($direction !== null) {
             $this->validateDirection($direction);
+        }
+
+        if ($this->direction !== $direction) {
+            $this->notify();
         }
 
         $this->direction = $direction;

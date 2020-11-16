@@ -130,4 +130,22 @@ class PaginatorTest extends TestCase
             $this->assertInstanceOf(ConfigException::class, $e);
         }
     }
+
+    public function testNotify()
+    {
+        $observer = $this->createMock(\SplObserver::class);
+        $observer->expects($this->exactly(4))->method('update');
+
+        $paginator = new Paginator();
+
+        $paginator->attach($observer);
+
+        $paginator->setPageSize(2);
+        $paginator->setPageSize(2);
+        $paginator->setPageSize(3);
+
+        $paginator->setCurrentPage(3);
+        $paginator->setCurrentPage(4);
+        $paginator->setCurrentPage(4);
+    }
 }

@@ -51,4 +51,20 @@ class ColumnCollectionTest extends TestCase
         $column1->setDirection(Sorter::SORT_DESC);
         $this->assertCount(2, $collection->findSorted());
     }
+
+    public function testNotify()
+    {
+        $collection = new ColumnCollection();
+
+        $observer = $this->createMock(\SplObserver::class);
+        $observer->expects($this->once())->method('update')->with($collection);
+        $collection->attach($observer);
+
+        $column = $this->createMock(Column::class);
+        $column->expects($this->once())
+            ->method('attach')
+            ->with($collection);
+
+        $collection->add($column);
+    }
 }

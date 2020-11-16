@@ -117,5 +117,18 @@ class ColumnTest extends TestCase
             ]
         ];
     }
+
+    public function testNotify()
+    {
+        $observer = $this->createMock(\SplObserver::class);
+        $observer->expects($this->exactly(2))->method('update');
+
+        $column = new Column('test');
+        $column->attach($observer);
+
+        $column->setDirection(Sorter::SORT_DESC);
+        $column->setDirection(Sorter::SORT_DESC);
+        $column->setDirection(Sorter::SORT_ASC);
+    }
 }
 

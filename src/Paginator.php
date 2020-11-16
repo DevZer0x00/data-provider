@@ -6,11 +6,13 @@ namespace DevZer0x00\DataProvider;
 
 use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Traits\ConfigurableTrait;
+use DevZer0x00\DataProvider\Traits\ObserverableTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use SplSubject;
 
-class Paginator
+class Paginator implements SplSubject
 {
-    use ConfigurableTrait;
+    use ConfigurableTrait, ObserverableTrait;
 
     private int $pageSize;
 
@@ -53,6 +55,10 @@ class Paginator
             throw new InvalidArgumentException('Page size must be greater that 0');
         }
 
+        if (!empty($this->pageSize) && $this->pageSize !== $pageSize) {
+            $this->notify();
+        }
+
         $this->pageSize = $pageSize;
 
         return $this;
@@ -68,6 +74,10 @@ class Paginator
     {
         if ($currentPage < 1) {
             throw new InvalidArgumentException('Current page must be greater or equals 1');
+        }
+
+        if (!empty($this->currentPage) && $this->currentPage !== $currentPage) {
+            $this->notify();
         }
 
         $this->currentPage = $currentPage;

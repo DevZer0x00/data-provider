@@ -6,9 +6,16 @@ namespace DevZer0x00\DataProvider\Sorter;
 
 use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
 use ArrayIterator;
+use DevZer0x00\DataProvider\Traits\ObserverableTrait;
+use IteratorAggregate;
+use Countable;
+use SplObserver;
+use SplSubject;
 
-class ColumnCollection implements \IteratorAggregate, \Countable
+class ColumnCollection implements IteratorAggregate, Countable, SplObserver, SplSubject
 {
+    use ObserverableTrait;
+
     /**
      * @var array|Column[]
      */
@@ -28,6 +35,9 @@ class ColumnCollection implements \IteratorAggregate, \Countable
                 sprintf('Column with name - %s already exists', $column->getName())
             );
         }
+
+        $column->attach($this);
+        $this->notify();
 
         $this->columns[$column->getName()] = $column;
     }
@@ -59,5 +69,10 @@ class ColumnCollection implements \IteratorAggregate, \Countable
     public function count()
     {
         return count($this->columns);
+    }
+
+    public function update(SplSubject $subject)
+    {
+        $this->notify();
     }
 }
