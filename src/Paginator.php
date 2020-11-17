@@ -55,7 +55,7 @@ class Paginator implements SplSubject
             throw new InvalidArgumentException('Page size must be greater that 0');
         }
 
-        $oldSize = empty($this->pageSize) ? null : $this->pageSize;
+        $oldSize = $this->pageSize ?? null;
 
         $this->pageSize = $pageSize;
 
@@ -78,7 +78,7 @@ class Paginator implements SplSubject
             throw new InvalidArgumentException('Current page must be greater or equals 1');
         }
 
-        $oldPage = empty($this->currentPage) ? null : $this->currentPage;
+        $oldPage = $this->currentPage ?? null;
 
         $this->currentPage = $currentPage;
 

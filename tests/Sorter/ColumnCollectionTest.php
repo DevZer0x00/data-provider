@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DevZer0x00\DataProvider\Tests\Sorter;
 
 use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
-use DevZer0x00\DataProvider\Sorter;
 use DevZer0x00\DataProvider\Sorter\Column;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +17,7 @@ class ColumnCollectionTest extends TestCase
 
         $this->assertCount(0, $collection);
 
-        $collection->add(new Column('test'));
+        $collection->add($this->createMock(Column::class));
 
         $this->assertCount(1, $collection);
     }
@@ -27,29 +26,41 @@ class ColumnCollectionTest extends TestCase
     {
         $this->expectException(NonUniqueColumnException::class);
 
+        $column1 = $this->createMock(Column::class);
+        $column1->method('getName')->willReturn('test');
+
+        $column2 = $this->createMock(Column::class);
+        $column2->method('getName')->willReturn('test');
+
         $collection = new ColumnCollection();
-        $collection->add(new Column('test'));
-        $collection->add(new Column('test'));
+        $collection->add($column1);
+        $collection->add($column2);
     }
 
     public function testGetSorted()
     {
         $collection = new ColumnCollection();
 
-        $column1 = new Column('test');
-        $column2 = new Column('test1');
+        $column1 = $this->createMock(Column::class);
+        $column1->method('getName')->willReturn('test');
+
+        $column2 = $this->createMock(Column::class);
+        $column2->method('getName')->willReturn('test1');
 
         $collection->add($column1);
         $collection->add($column2);
 
-        $this->assertCount(0, $collection->findSorted());
+        $this->assertCount(0, $collection->findSortable());
 
-        $column2->setDirection(Sorter::SORT_ASC);
-        $this->assertCount(1, $collection->findSorted());
-        $this->assertSame($column2, $collection->findSorted()->first());
+        $column2->method('isSorted')->willReturn(true);
+        $this->assertCount(1, $collection->findSortable());
+        $this->assertSame($column2, $collection->findSortable()->first());
 
-        $column1->setDirection(Sorter::SORT_DESC);
-        $this->assertCount(2, $collection->findSorted());
+        $column1->method('isSorted')->willReturn(true);
+        $this->assertCount(2, $collection->findSortable());
+
+        $this->assertCount(1, $collection->reduceToFirstColumn());
+        $this->assertSame($column1, $collection->reduceToFirstColumn()->first());
     }
 
     public function testEvents()

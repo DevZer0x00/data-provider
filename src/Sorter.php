@@ -4,73 +4,84 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider;
 
-class Sorter
+use DevZer0x00\DataProvider\Sorter\ColumnCollection;
+use DevZer0x00\DataProvider\Traits\ConfigurableTrait;
+use DevZer0x00\DataProvider\Traits\ObserverableTrait;
+use SplSubject;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use SplObserver;
+
+class Sorter implements SplObserver, SplSubject
 {
+    use ConfigurableTrait, ObserverableTrait;
+
     const SORT_ASC = 'asc';
 
     const SORT_DESC = 'desc';
 
-    /**
-     * $columnSettings = [
-     *    "column_name_1" => [
-     *        SorterInterface::SORT_ASC => [
-     *          "field_name1" => SorterInterface::SORT_ASC, "field_name2" => SorterInterface::SORT_DESC
-     *        ],
-     *        SorterInterface::SORT_DESC => [
-     *          "field_name1" => SorterInterface::SORT_DESC, "field_name2" => SorterInterface::SORT_ASC
-     *        ],
-     *        "default" => SORT_ASC
-     *     ],
-     *     "column_name_2",
-     *     .....
-     *     "column_name_N"
-     * ]
-     *
-     * @param array $columnSettings
-     * @return $this
-     */
-    public function setAvailableOrderBy(array $columnSettings): self
-    {
+    private ColumnCollection $columnCollection;
 
+    private bool $multiSortable;
+
+    protected function configureOptions(OptionsResolver $resolver): OptionsResolver
+    {
+        $resolver->setDefined(['columnCollection', 'multiSortable']);
+
+        $resolver->setDefault('multiSortable', false);
+
+        $resolver->setAllowedTypes('columnCollection', ColumnCollection::class);
+        $resolver->setAllowedTypes('multiSortable', 'bool');
+
+        return $resolver;
     }
 
-    /**
-     * [
-     * "column_name_1" => [
-     *     SorterInterface::SORT_ASC => [
-     *        "field_name1" => SorterInterface::SORT_ASC, "field_name2" => SorterInterface::SORT_DESC
-     *     ],
-     *     SorterInterface::SORT_DESC => [
-     *        "field_name1" => SorterInterface::SORT_DESC, "field_name2" => SorterInterface::SORT_ASC
-     *     ],
-     *        "default" => SORT_ASC
-     *     ],
-     * ]
-     *
-     * @return array
-     */
-    public function getAvailableOrderBy(): array
+    public function setColumnCollection(ColumnCollection $columnCollection): Sorter
     {
+        $oldCollection = $this->columnCollection ?? null;
 
+        if (empty($this->columnCollection)) {
+            $columnCollection->attach($this);
+        } elseif ($this->columnCollection !== $columnCollection) {
+            $columnCollection->attach($this);
+            $this->columnCollection->detach($this);
+        }
+
+        $this->columnCollection = $columnCollection;
+
+        if ($oldCollection !== $this->columnCollection) {
+            $this->notify();
+        }
+
+        return $this;
     }
 
-    public function setDefaultOrderBy(array $columns)
+    public function isMultiSortable(): bool
     {
-
+        return $this->multiSortable;
     }
 
-    public function getDefaultOrderBy(): array
+    public function setMultiSortable(bool $flag): Sorter
     {
+        $oldFlag = $this->multiSortable ?? null;
 
+        $this->multiSortable = $flag;
+
+        if ($oldFlag !== $this->multiSortable) {
+            $this->notify();
+        }
+
+        return $this;
     }
-    
-    public function setOrderBy(array $columns): self
-    {
 
+    public function getSortableColumns(): ColumnCollection
+    {
+        $sortable = $this->columnCollection->findSortable();
+
+        return $this->isMultiSortable() ? $sortable : $sortable->reduceToFirstColumn();
     }
 
-    public function getOrderBy(): array
+    public function update(SplSubject $subject)
     {
-
+        $this->notify();
     }
 }
