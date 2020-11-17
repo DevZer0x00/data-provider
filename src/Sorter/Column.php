@@ -83,11 +83,12 @@ class Column implements SplSubject
             $this->validateDirection($direction);
         }
 
-        if ($this->direction !== $direction) {
+        $oldDirection = $this->direction;
+        $this->direction = $direction;
+
+        if ($oldDirection !== $direction) {
             $this->notify();
         }
-
-        $this->direction = $direction;
 
         return $this;
     }

@@ -131,10 +131,48 @@ class PaginatorTest extends TestCase
         }
     }
 
-    public function testNotify()
+    public function testEvents()
     {
         $observer = $this->createMock(\SplObserver::class);
-        $observer->expects($this->exactly(4))->method('update');
+        $observer->expects($this->at(0))
+            ->method('update')
+            ->with(
+                $this->callback(function (Paginator $paginator) {
+                    $this->assertEquals(2, $paginator->getPageSize());
+
+                    return true;
+                })
+            );
+
+        $observer->expects($this->at(1))
+            ->method('update')
+            ->with(
+                $this->callback(function (Paginator $paginator) {
+                    $this->assertEquals(3, $paginator->getPageSize());
+
+                    return true;
+                })
+            );
+
+        $observer->expects($this->at(2))
+            ->method('update')
+            ->with(
+                $this->callback(function (Paginator $paginator) {
+                    $this->assertEquals(3, $paginator->getCurrentPage());
+
+                    return true;
+                })
+            );
+
+        $observer->expects($this->at(3))
+            ->method('update')
+            ->with(
+                $this->callback(function (Paginator $paginator) {
+                    $this->assertEquals(4, $paginator->getCurrentPage());
+
+                    return true;
+                })
+            );
 
         $paginator = new Paginator();
 

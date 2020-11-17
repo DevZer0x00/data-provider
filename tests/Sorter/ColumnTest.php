@@ -118,10 +118,28 @@ class ColumnTest extends TestCase
         ];
     }
 
-    public function testNotify()
+    public function testEvents()
     {
         $observer = $this->createMock(\SplObserver::class);
-        $observer->expects($this->exactly(2))->method('update');
+        $observer->expects($this->at(0))
+            ->method('update')
+            ->with(
+                $this->callback(function (Column $column) {
+                    $this->assertEquals(Sorter::SORT_DESC, $column->getDirection());
+
+                    return true;
+                })
+            );
+
+        $observer->expects($this->at(1))
+            ->method('update')
+            ->with(
+                $this->callback(function (Column $column) {
+                    $this->assertEquals(Sorter::SORT_ASC, $column->getDirection());
+
+                    return true;
+                })
+            );
 
         $column = new Column('test');
         $column->attach($observer);

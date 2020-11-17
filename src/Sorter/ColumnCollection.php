@@ -37,9 +37,10 @@ class ColumnCollection implements IteratorAggregate, Countable, SplObserver, Spl
         }
 
         $column->attach($this);
-        $this->notify();
 
         $this->columns[$column->getName()] = $column;
+
+        $this->notify();
     }
 
     public function first(): ?Column

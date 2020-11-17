@@ -22,10 +22,10 @@ class Paginator implements SplSubject
 
     protected function configureOptions(OptionsResolver $resolver): OptionsResolver
     {
-        $resolver->setDefaults([
-            'pageSize' => 1,
-            'currentPage' => 1,
-            'totalCount' => 0,
+        $resolver->setDefined([
+            'pageSize',
+            'currentPage',
+            'totalCount',
         ]);
 
         $resolver->setAllowedTypes('pageSize', 'int')
@@ -55,11 +55,13 @@ class Paginator implements SplSubject
             throw new InvalidArgumentException('Page size must be greater that 0');
         }
 
-        if (!empty($this->pageSize) && $this->pageSize !== $pageSize) {
-            $this->notify();
-        }
+        $oldSize = empty($this->pageSize) ? null : $this->pageSize;
 
         $this->pageSize = $pageSize;
+
+        if ($oldSize !== $pageSize) {
+            $this->notify();
+        }
 
         return $this;
     }
@@ -76,11 +78,13 @@ class Paginator implements SplSubject
             throw new InvalidArgumentException('Current page must be greater or equals 1');
         }
 
-        if (!empty($this->currentPage) && $this->currentPage !== $currentPage) {
-            $this->notify();
-        }
+        $oldPage = empty($this->currentPage) ? null : $this->currentPage;
 
         $this->currentPage = $currentPage;
+
+        if ($oldPage !== $this->currentPage) {
+            $this->notify();
+        }
 
         return $this;
     }
