@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider;
 
+use DevZer0x00\DataProvider\Sorter\Column;
+use DevZer0x00\DataProvider\Sorter\ColumnCollection;
 use DevZer0x00\DataProvider\Traits\ConfigurableTrait;
 use SplSubject;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,11 +19,16 @@ class ArrayDataProvider implements SplObserver
 
     private ?Paginator $paginator = null;
 
-    private array $originalData;
+    private array $originalData = [];
 
     private array $data;
 
     private bool $initialized = false;
+
+    /**
+     * @var callable|null
+     */
+    private $sortCallback;
 
     /**
      * @inheritDoc
@@ -41,6 +48,18 @@ class ArrayDataProvider implements SplObserver
         $this->refresh();
 
         $this->sorter = $sorter;
+
+        return $this;
+    }
+
+    public function getSortCallback(): ?callable
+    {
+        return $this->sortCallback;
+    }
+
+    public function setSortCallback(?callable $sortCallback): ArrayDataProvider
+    {
+        $this->sortCallback = $sortCallback;
 
         return $this;
     }
@@ -85,12 +104,12 @@ class ArrayDataProvider implements SplObserver
 
     protected function configureOptions(OptionsResolver $resolver): OptionsResolver
     {
-        $resolver->setRequired('originalData');
-        $resolver->setDefined(['sorter', 'paginator']);
+        $resolver->setDefined(['originalData', 'sorter', 'paginator', 'sortCallback']);
 
         $resolver->setAllowedTypes('originalData', 'array')
             ->setAllowedTypes('sorter', ['null', Sorter::class])
-            ->setAllowedTypes('paginator', ['null', Paginator::class]);
+            ->setAllowedTypes('paginator', ['null', Paginator::class])
+            ->setAllowedTypes('sortCallback', ['null', 'callable']);
 
         return $resolver;
     }
@@ -112,6 +131,12 @@ class ArrayDataProvider implements SplObserver
 
         $data = $this->originalData;
 
+        if ($sorter = $this->getSorter()) {
+            $callback = $this->getSortCallback() ?? [$this, 'defaultSortCallback'];
+
+            $data = $callback($data, $sorter->getSortableColumns());
+        }
+
         if ($paginator = $this->getPaginator()) {
             $data = array_slice(
                 $data,
@@ -123,5 +148,27 @@ class ArrayDataProvider implements SplObserver
         $this->data = $data;
 
         return $this;
+    }
+
+    private function defaultSortCallback(array $data, ColumnCollection $sortedColumns): array
+    {
+        $sortParams = [];
+
+        /** @var Column $sortedColumn */
+        foreach ($sortedColumns as $sortedColumn) {
+            $fields = $sortedColumn->getOrderByFields();
+
+            foreach ($fields as $field => $direction) {
+                $sortParams[] = array_column($data, $field);
+                $sortParams[] = $direction === Sorter::SORT_ASC ? SORT_ASC : SORT_DESC;
+                $sortParams[] = SORT_NUMERIC;
+            }
+        }
+
+        $sortParams[] = &$data;
+
+        array_multisort(...$sortParams);
+
+        return $data;
     }
 }
