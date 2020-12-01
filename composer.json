@@ -2,7 +2,6 @@
   "name": "devzer0x00/data-provider",
   "description": "Data provider",
   "type": "library",
-  "version": "0.1.0",
   "license": "proprietary",
   "require": {
     "php": "^7.4",
