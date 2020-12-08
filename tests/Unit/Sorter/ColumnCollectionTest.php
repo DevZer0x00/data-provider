@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevZer0x00\DataProvider\Tests\Sorter;
+namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 
 use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
 use DevZer0x00\DataProvider\Sorter\Column;
@@ -75,7 +75,6 @@ class ColumnCollectionTest extends TestCase
                 return true;
             })
         );
-
 
         $collection->attach($observer);
 

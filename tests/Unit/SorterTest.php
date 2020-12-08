@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevZer0x00\DataProvider\Tests;
+namespace DevZer0x00\DataProvider\Tests\Unit;
 
 use DevZer0x00\DataProvider\Sorter;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
