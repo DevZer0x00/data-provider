@@ -23,6 +23,10 @@ class Column implements SplSubject
         string $name,
         array $orderSettings = []
     ) {
+        if (empty($name)) {
+            throw new InvalidArgumentException('Column name can not be empty');
+        }
+
         $this->name = $name;
         $this->orderSettings = $this->prepareOrderSettings($orderSettings);
     }

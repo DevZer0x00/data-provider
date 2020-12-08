@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevZer0x00\DataProvider\Tests\Sorter;
+namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 
 use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Sorter\Column;
@@ -16,6 +16,13 @@ class ColumnTest extends TestCase
         $column = new Column('test');
 
         $this->assertEquals('test', $column->getName());
+    }
+
+    public function testConstructorEmptyName()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new Column('');
     }
 
     public function testDirection()
