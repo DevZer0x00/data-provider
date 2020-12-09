@@ -45,7 +45,9 @@ class ColumnCollection implements IteratorAggregate, Countable, SplObserver, Spl
 
     public function first(): ?Column
     {
-        return current($this->columns);
+        $column = reset($this->columns);
+
+        return $column ? $column : null;
     }
 
     public function findSortable(): self
@@ -63,7 +65,7 @@ class ColumnCollection implements IteratorAggregate, Countable, SplObserver, Spl
 
     public function reduceToFirstColumn(): self
     {
-        return new self($this->first() ? [$this->first()] : null);
+        return new self($this->first() ? [$this->first()] : []);
     }
 
     public function getIterator()

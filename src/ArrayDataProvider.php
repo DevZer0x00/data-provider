@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider;
 
+use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use DevZer0x00\DataProvider\Sorter\Column;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
 use DevZer0x00\DataProvider\Traits\ConfigurableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use SplSubject;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use SplObserver;
@@ -14,6 +16,8 @@ use SplObserver;
 class ArrayDataProvider implements SplObserver
 {
     use ConfigurableTrait;
+
+    private ?Filter $filter = null;
 
     private ?Sorter $sorter = null;
 
@@ -30,9 +34,6 @@ class ArrayDataProvider implements SplObserver
      */
     private $sortCallback;
 
-    /**
-     * @inheritDoc
-     */
     public function update(SplSubject $subject)
     {
         $this->refresh();
@@ -46,6 +47,16 @@ class ArrayDataProvider implements SplObserver
     public function setSorter(?Sorter $sorter): ArrayDataProvider
     {
         $this->refresh();
+
+        if ($this->sorter !== $sorter) {
+            if ($this->sorter !== null) {
+                $this->sorter->detach($this);
+            }
+
+            if ($sorter !== null) {
+                $sorter->attach($this);
+            }
+        }
 
         $this->sorter = $sorter;
 
@@ -74,14 +85,40 @@ class ArrayDataProvider implements SplObserver
         $this->refresh();
 
         if ($this->paginator !== $paginator) {
-            if (!empty($this->paginator)) {
+            if ($this->paginator !== null) {
                 $this->paginator->detach($this);
             }
 
-            $paginator->attach($this);
+            if ($paginator !== null) {
+                $paginator->attach($this);
+            }
         }
 
         $this->paginator = $paginator;
+
+        return $this;
+    }
+
+    public function getFilter(): ?Filter
+    {
+        return $this->filter;
+    }
+
+    public function setFilter(?Filter $filter): self
+    {
+        $this->refresh();
+
+        if ($this->filter !== $filter) {
+            if ($this->filter !== null) {
+                $this->filter->detach($this);
+            }
+
+            if ($filter !== null) {
+                $filter->attach($this);
+            }
+        }
+
+        $this->filter = $filter;
 
         return $this;
     }
@@ -104,9 +141,10 @@ class ArrayDataProvider implements SplObserver
 
     protected function configureOptions(OptionsResolver $resolver): OptionsResolver
     {
-        $resolver->setDefined(['originalData', 'sorter', 'paginator', 'sortCallback']);
+        $resolver->setDefined(['originalData', 'filter', 'sorter', 'paginator', 'sortCallback']);
 
         $resolver->setAllowedTypes('originalData', 'array')
+            ->setAllowedTypes('filter', ['null', Filter::class])
             ->setAllowedTypes('sorter', ['null', Sorter::class])
             ->setAllowedTypes('paginator', ['null', Paginator::class])
             ->setAllowedTypes('sortCallback', ['null', 'callable']);
@@ -131,6 +169,17 @@ class ArrayDataProvider implements SplObserver
 
         $data = $this->originalData;
 
+        if ($filter = $this->getFilter()) {
+            $collection = new ArrayCollection($data);
+
+            /** @var CriteriaAbstract $criteria */
+            foreach ($filter->getFilterCriteriaCollection() as $criteria) {
+                $collection = $collection->matching($criteria->getCriteria());
+            }
+
+            $data = $collection->getValues();
+        }
+
         if ($sorter = $this->getSorter()) {
             $callback = $this->getSortCallback() ?? [$this, 'defaultSortCallback'];
 
@@ -138,6 +187,8 @@ class ArrayDataProvider implements SplObserver
         }
 
         if ($paginator = $this->getPaginator()) {
+            $paginator->setTotalCount(count($data));
+
             $data = array_slice(
                 $data,
                 $paginator->getPageSize() * ($paginator->getCurrentPage() - 1),
@@ -152,6 +203,10 @@ class ArrayDataProvider implements SplObserver
 
     private function defaultSortCallback(array $data, ColumnCollection $sortedColumns): array
     {
+        if ($sortedColumns->count() === 0) {
+            return $data;
+        }
+
         $sortParams = [];
 
         /** @var Column $sortedColumn */

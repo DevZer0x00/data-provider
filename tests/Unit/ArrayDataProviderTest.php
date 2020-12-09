@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace DevZer0x00\DataProvider\Tests\Unit;
 
 use DevZer0x00\DataProvider\ArrayDataProvider;
+use DevZer0x00\DataProvider\Filter;
 use DevZer0x00\DataProvider\Paginator;
 use DevZer0x00\DataProvider\Sorter;
+use Doctrine\Common\Collections\Criteria;
 use PHPUnit\Framework\TestCase;
+use ArrayIterator;
+use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
+use DevZer0x00\DataProvider\Filter\CriteriaCollection;
 
 class ArrayDataProviderTest extends TestCase
 {
@@ -48,6 +53,9 @@ class ArrayDataProviderTest extends TestCase
 
         $paginator = $this->createMock(Paginator::class);
         $paginator->expects($this->once())
+            ->method('setTotalCount')
+            ->with(count($originalData));
+        $paginator->expects($this->once())
             ->method('attach')
             ->with($provider);
         $paginator->expects($this->once())
@@ -55,7 +63,11 @@ class ArrayDataProviderTest extends TestCase
             ->with($provider);
 
         $provider->setPaginator($paginator);
+
+        $provider->getData();
+
         $provider->setPaginator($this->createMock(Paginator::class));
+        $provider->setPaginator(null);
     }
 
     public function testSort()
@@ -69,6 +81,24 @@ class ArrayDataProviderTest extends TestCase
 
         $provider = new ArrayDataProvider();
         $provider->setOriginalData($arr);
+
+        $sorter = $this->createMock(Sorter::class);
+        $sorter->expects($this->any())
+            ->method('isMultiSortable')
+            ->willReturn(false);
+
+        $columnCollection = $this->createMock(Sorter\ColumnCollection::class);
+        $columnCollection->expects($this->once())
+            ->method('count')
+            ->willReturn(0);
+
+        $sorter->expects($this->any())
+            ->method('getSortableColumns')
+            ->willReturn($columnCollection);
+
+        $provider->setSorter($sorter);
+
+        $this->assertEquals($arr, $provider->getData());
 
         $sorter = $this->createMock(Sorter::class);
         $sorter->expects($this->any())
@@ -94,6 +124,14 @@ class ArrayDataProviderTest extends TestCase
             ->method('getSortableColumns')
             ->willReturn($columnCollection);
 
+        $sorter->expects($this->once())
+            ->method('attach')
+            ->with($provider);
+        $sorter->expects($this->once())
+            ->method('detach')
+            ->with($provider);
+
+        $provider->setSorter($sorter);
         $provider->setSorter($sorter);
 
         $sorted1 = [
@@ -108,5 +146,41 @@ class ArrayDataProviderTest extends TestCase
         $provider->setSorter(null);
 
         $this->assertEquals($arr, $provider->getData());
+    }
+
+    public function testFilter()
+    {
+        $provider = new ArrayDataProvider();
+
+        $criteria1 = $this->getMockForAbstractClass(CriteriaAbstract::class, [1]);
+        $criteria1->expects($this->once())
+            ->method('getCriteria')
+            ->willReturn(new Criteria());
+        $criteria2 = $this->getMockForAbstractClass(CriteriaAbstract::class, [2]);
+        $criteria2->expects($this->once())
+            ->method('getCriteria')
+            ->willReturn(new Criteria());
+
+        $criteriaCollection = $this->createMock(CriteriaCollection::class);
+        $criteriaCollection->method('getIterator')
+            ->willReturn(new ArrayIterator([$criteria1, $criteria2]));
+
+        $filter = $this->createMock(Filter::class);
+        $filter->expects($this->once())
+            ->method('getFilterCriteriaCollection')
+            ->willReturn($criteriaCollection);
+        $filter->expects($this->once())
+            ->method('attach')
+            ->with($provider);
+        $filter->expects($this->once())
+            ->method('detach')
+            ->with($provider);
+
+        $provider->setFilter($filter);
+        $provider->setFilter($filter);
+
+        $data = $provider->getData();
+
+        $provider->setFilter(null);
     }
 }

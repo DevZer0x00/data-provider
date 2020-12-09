@@ -37,7 +37,7 @@ class ColumnCollectionTest extends TestCase
         $collection->add($column2);
     }
 
-    public function testGetSorted()
+    public function testFindSortable()
     {
         $collection = new ColumnCollection();
 
@@ -54,12 +54,42 @@ class ColumnCollectionTest extends TestCase
 
         $column2->method('isSorted')->willReturn(true);
         $this->assertCount(1, $collection->findSortable());
-        $this->assertSame($column2, $collection->findSortable()->first());
 
         $column1->method('isSorted')->willReturn(true);
         $this->assertCount(2, $collection->findSortable());
 
         $this->assertCount(1, $collection->reduceToFirstColumn());
+    }
+
+    public function testFirst()
+    {
+        $collection = new ColumnCollection();
+
+        $this->assertNull($collection->first());
+
+        $column = $this->createMock(Column::class);
+        $column->method('getName')->willReturn('test');
+
+        $collection->add($column);
+
+        $this->assertSame($column, $collection->first());
+    }
+
+    public function testReduceToFirst()
+    {
+        $collection = new ColumnCollection();
+
+        $this->assertCount(0, $collection->reduceToFirstColumn());
+
+        $column1 = $this->createMock(Column::class);
+        $column1->method('getName')->willReturn('test');
+
+        $column2 = $this->createMock(Column::class);
+        $column2->method('getName')->willReturn('test1');
+
+        $collection->add($column1);
+        $collection->add($column2);
+
         $this->assertSame($column1, $collection->reduceToFirstColumn()->first());
     }
 
