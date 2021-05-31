@@ -1,16 +1,20 @@
-language: php
-
-php:
-  - 7.4
+sudo: required
+services:
+  - docker
 
 env:
   XDEBUG_MODE=coverage
+  DOCKER_COMPOSE_VERSION=1.27.0
 
-before_script:
-  - composer install --prefer-source
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 script:
-  - ./vendor/bin/phpunit -c phpunit.xml --coverage-clover coverage.xml
+  - docker-compose build
+  - docker-compose run --user='root' app
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+#after_success:
+#  - bash <(curl -s https://codecov.io/bash)

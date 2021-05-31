@@ -9,12 +9,12 @@ use DevZer0x00\DataProvider\Filter;
 use DevZer0x00\DataProvider\Paginator;
 use DevZer0x00\DataProvider\Sorter;
 use Doctrine\Common\Collections\Criteria;
-use PHPUnit\Framework\TestCase;
 use ArrayIterator;
 use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use DevZer0x00\DataProvider\Filter\CriteriaCollection;
+use Codeception\Test\Unit;
 
-class ArrayDataProviderTest extends TestCase
+class ArrayDataProviderTest extends Unit
 {
     public function testPaginator()
     {

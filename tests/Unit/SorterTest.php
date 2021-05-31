@@ -6,9 +6,9 @@ namespace DevZer0x00\DataProvider\Tests\Unit;
 
 use DevZer0x00\DataProvider\Sorter;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
-use PHPUnit\Framework\TestCase;
+use Codeception\Test\Unit;
 
-class SorterTest extends TestCase
+class SorterTest extends Unit
 {
     public function testMultiSortable()
     {

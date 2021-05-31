@@ -7,10 +7,10 @@ namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 use DevZer0x00\DataProvider\Exception\NonUniqueCriteriaException;
 use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use DevZer0x00\DataProvider\Filter\CriteriaCollection;
-use PHPUnit\Framework\TestCase;
 use SplObserver;
+use Codeception\Test\Unit;
 
-class CriteriaCollectionTest extends TestCase
+class CriteriaCollectionTest extends Unit
 {
     public function testConstruct()
     {

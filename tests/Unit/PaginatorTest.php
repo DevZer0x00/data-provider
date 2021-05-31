@@ -7,10 +7,10 @@ namespace DevZer0x00\DataProvider\Tests\Unit;
 use DevZer0x00\DataProvider\Exception\ConfigException;
 use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Paginator;
-use PHPUnit\Framework\TestCase;
 use Throwable;
+use Codeception\Test\Unit;
 
-class PaginatorTest extends TestCase
+class PaginatorTest extends Unit
 {
     public function testPageSize()
     {
@@ -134,44 +134,38 @@ class PaginatorTest extends TestCase
     public function testEvents()
     {
         $observer = $this->createMock(\SplObserver::class);
-        $observer->expects($this->at(0))
+
+        $observer->expects($this->any())
             ->method('update')
-            ->with(
-                $this->callback(function (Paginator $paginator) {
-                    $this->assertEquals(2, $paginator->getPageSize());
+            ->withConsecutive(
+                [
+                    $this->callback(function (Paginator $paginator) {
+                        $this->assertEquals(2, $paginator->getPageSize());
 
-                    return true;
-                })
-            );
+                        return true;
+                    })
+                ],
+                [
+                    $this->callback(function (Paginator $paginator) {
+                        $this->assertEquals(3, $paginator->getPageSize());
 
-        $observer->expects($this->at(1))
-            ->method('update')
-            ->with(
-                $this->callback(function (Paginator $paginator) {
-                    $this->assertEquals(3, $paginator->getPageSize());
+                        return true;
+                    })
+                ],
+                [
+                    $this->callback(function (Paginator $paginator) {
+                        $this->assertEquals(3, $paginator->getCurrentPage());
 
-                    return true;
-                })
-            );
+                        return true;
+                    })
+                ],
+                [
+                    $this->callback(function (Paginator $paginator) {
+                        $this->assertEquals(4, $paginator->getCurrentPage());
 
-        $observer->expects($this->at(2))
-            ->method('update')
-            ->with(
-                $this->callback(function (Paginator $paginator) {
-                    $this->assertEquals(3, $paginator->getCurrentPage());
-
-                    return true;
-                })
-            );
-
-        $observer->expects($this->at(3))
-            ->method('update')
-            ->with(
-                $this->callback(function (Paginator $paginator) {
-                    $this->assertEquals(4, $paginator->getCurrentPage());
-
-                    return true;
-                })
+                        return true;
+                    })
+                ]
             );
 
         $paginator = new Paginator();

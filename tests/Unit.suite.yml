@@ -1,0 +1,6 @@
+actor: UnitTester
+modules:
+  enabled:
+    - Asserts
+    - \DevZer0x00\DataProvider\Tests\Helper\Unit
+  step_decorators: ~
