@@ -6,9 +6,9 @@ namespace DevZer0x00\DataProvider\Tests\Unit;
 
 use DevZer0x00\DataProvider\Filter;
 use DevZer0x00\DataProvider\Filter\CriteriaCollection;
-use PHPUnit\Framework\TestCase;
+use Codeception\Test\Unit;
 
-class FilterTest extends TestCase
+class FilterTest extends Unit
 {
     public function testSetCollection()
     {

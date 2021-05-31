@@ -7,9 +7,9 @@ namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Sorter\Column;
 use DevZer0x00\DataProvider\Sorter;
-use PHPUnit\Framework\TestCase;
+use Codeception\Test\Unit;
 
-class ColumnTest extends TestCase
+class ColumnTest extends Unit
 {
     public function testName()
     {
@@ -128,24 +128,23 @@ class ColumnTest extends TestCase
     public function testEvents()
     {
         $observer = $this->createMock(\SplObserver::class);
-        $observer->expects($this->at(0))
+        $observer->expects($this->any())
             ->method('update')
-            ->with(
-                $this->callback(function (Column $column) {
-                    $this->assertEquals(Sorter::SORT_DESC, $column->getDirection());
+            ->withConsecutive(
+                [
+                    $this->callback(function (Column $column) {
+                        $this->assertEquals(Sorter::SORT_DESC, $column->getDirection());
 
-                    return true;
-                })
-            );
+                        return true;
+                    })
+                ],
+                [
+                    $this->callback(function (Column $column) {
+                        $this->assertEquals(Sorter::SORT_ASC, $column->getDirection());
 
-        $observer->expects($this->at(1))
-            ->method('update')
-            ->with(
-                $this->callback(function (Column $column) {
-                    $this->assertEquals(Sorter::SORT_ASC, $column->getDirection());
-
-                    return true;
-                })
+                        return true;
+                    })
+                ],
             );
 
         $column = new Column('test');

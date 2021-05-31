@@ -7,9 +7,9 @@ namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
 use DevZer0x00\DataProvider\Sorter\Column;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
-use PHPUnit\Framework\TestCase;
+use Codeception\Test\Unit;
 
-class ColumnCollectionTest extends TestCase
+class ColumnCollectionTest extends Unit
 {
     public function testAdd()
     {

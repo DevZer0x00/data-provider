@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 
 use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
-use PHPUnit\Framework\TestCase;
+use Codeception\Test\Unit;
 
-class CriteriaAbstractTest extends TestCase
+class CriteriaAbstractTest extends Unit
 {
     public function testGetName()
     {
