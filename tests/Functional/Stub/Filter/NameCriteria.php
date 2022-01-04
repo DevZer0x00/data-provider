@@ -38,7 +38,10 @@ class NameCriteria extends CriteriaAbstract
     public function getCriteria(): Criteria
     {
         $criteria = new Criteria();
-        $criteria->where($criteria::expr()->eq('name', $this->getValue()));
+
+        if (!empty($this->value)) {
+            $criteria->where($criteria::expr()->eq('name', $this->getValue()));
+        }
 
         return $criteria;
     }

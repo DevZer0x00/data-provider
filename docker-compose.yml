@@ -2,7 +2,16 @@ version: '3.7'
 
 services:
   app:
-    build:
-      context: .
+    build: ./.docker/app
     volumes:
       - ./:/var/www/html
+    links:
+      - mysql
+  mysql:
+    build: ./.docker/mysql
+    container_name: dataprovider-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3300:3306

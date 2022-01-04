@@ -51,11 +51,6 @@ class Filter implements SplSubject, SplObserver
         return $this;
     }
 
-    public function getFilterCriteriaCollection(): CriteriaCollection
-    {
-        return $this->criteriaCollection->findFiltered();
-    }
-
     /**
      * @inheritDoc
      */

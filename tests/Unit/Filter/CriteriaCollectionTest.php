@@ -60,49 +60,6 @@ class CriteriaCollectionTest extends Unit
         $collection->addCriteria($this->getMockForAbstractClass(CriteriaAbstract::class, ['t']));
     }
 
-    /**
-     * @dataProvider filteredCriteriaProvider
-     *
-     * @param bool[] ...$canUse
-     */
-    public function testFindFiltered(...$canUse)
-    {
-        $criterias = $usedCriterias = [];
-        $c = 0;
-
-        foreach ($canUse as $use) {
-            $c++;
-
-            $criteria = $this->getMockForAbstractClass(CriteriaAbstract::class, [$c]);
-            $criteria->expects($this->once())
-                ->method('canUse')
-                ->willReturn($use);
-
-            $criterias[] = $criteria;
-
-            if ($use) {
-                $usedCriterias[$criteria->getName()] = $criteria;
-            }
-        }
-
-        $collection = new CriteriaCollection($criterias);
-
-        $filtered = $collection->findFiltered();
-
-        $this->assertCount(count($usedCriterias), $filtered);
-        $this->assertSame($usedCriterias, iterator_to_array($filtered));
-    }
-
-    public function filteredCriteriaProvider()
-    {
-        return [
-            [true, false, true],
-            [false, false, false],
-            [false, false, true],
-            [false, true, true, true],
-        ];
-    }
-
     public function testEvents()
     {
         $collection = new CriteriaCollection();

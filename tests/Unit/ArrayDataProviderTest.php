@@ -167,7 +167,7 @@ class ArrayDataProviderTest extends Unit
 
         $filter = $this->createMock(Filter::class);
         $filter->expects($this->once())
-            ->method('getFilterCriteriaCollection')
+            ->method('getCriteriaCollection')
             ->willReturn($criteriaCollection);
         $filter->expects($this->once())
             ->method('attach')
