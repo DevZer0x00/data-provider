@@ -24,16 +24,6 @@ class FilterTest extends Unit
         $this->assertSame($collection, $filter->getCriteriaCollection());
     }
 
-    public function testFilteredCollection()
-    {
-        $filter = new Filter();
-        $collection = $this->createMock(CriteriaCollection::class);
-        $collection->expects($this->once())->method('findFiltered');
-        $filter->setCriteriaCollection($collection);
-
-        $filter->getFilterCriteriaCollection();
-    }
-
     public function testEvents()
     {
         $filter = new Filter();

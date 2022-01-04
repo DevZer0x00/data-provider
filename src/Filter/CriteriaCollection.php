@@ -43,20 +43,6 @@ class CriteriaCollection implements IteratorAggregate, Countable, SplSubject, Sp
         return $this;
     }
 
-    public function findFiltered(): self
-    {
-        $filtered = [];
-
-        /** @var CriteriaAbstract $criteria */
-        foreach ($this->criteria as $criteria) {
-            if ($criteria->canUse()) {
-                $filtered[] = $criteria;
-            }
-        }
-
-        return new self($filtered);
-    }
-
     public function getIterator()
     {
         return new ArrayIterator($this->criteria);

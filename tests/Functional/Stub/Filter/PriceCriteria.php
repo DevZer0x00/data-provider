@@ -46,11 +46,6 @@ class PriceCriteria extends CriteriaAbstract
         return $this;
     }
 
-    public function canUse(): bool
-    {
-        return !empty($this->maxPrice) || !empty($this->minPrice);
-    }
-
     public function getCriteria(): Criteria
     {
         $criteria = new Criteria();
