@@ -58,7 +58,7 @@ final class ArrayDataProviderTest extends Unit
         $paginator = $this->createMock(Paginator::class);
         $paginator->expects($this->once())
             ->method('setTotalCount')
-            ->with(\count($originalData));
+            ->with(count($originalData));
         $paginator->expects($this->once())
             ->method('attach')
             ->with($provider);
@@ -122,7 +122,7 @@ final class ArrayDataProviderTest extends Unit
         $columnCollection = $this->createMock(Sorter\ColumnCollection::class);
         $columnCollection->expects($this->any())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$column1, $column2]));
+            ->willReturn(new ArrayIterator([$column1, $column2]));
 
         $sorter->expects($this->any())
             ->method('getSortableColumns')
@@ -183,7 +183,7 @@ final class ArrayDataProviderTest extends Unit
         $provider->setFilter($filter);
         $provider->setFilter($filter);
 
-        $data = $provider->getData();
+        $provider->getData();
 
         $provider->setFilter(null);
     }

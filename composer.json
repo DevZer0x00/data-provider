@@ -47,7 +47,7 @@
         },
         "hooks": {
             "pre-commit": [
-                "docker start dataprovider_app_1 && docker exec dataprovider_app_1 vendor/bin/php-cs-fixer fix -vv --dry-run --stop-on-violation --cache-file .ps_cs.cache"
+                "docker start dataprovider_app && docker exec dataprovider_app vendor/bin/php-cs-fixer fix -vv --dry-run --stop-on-violation --cache-file .ps_cs.cache"
             ]
         }
     },

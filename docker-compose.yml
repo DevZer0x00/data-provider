@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   app:
+    container_name: dataprovider_app
     build: ./.docker/app
     volumes:
       - ./:/var/www/html

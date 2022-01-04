@@ -76,9 +76,9 @@ class ArrayDataProvider extends DataProviderAbstract
         }
 
         if ($paginator = $this->getPaginator()) {
-            $paginator->setTotalCount(\count($data));
+            $paginator->setTotalCount(count($data));
 
-            $data = \array_slice(
+            $data = array_slice(
                 $data,
                 $paginator->getPageSize() * ($paginator->getCurrentPage() - 1),
                 $paginator->getPageSize()

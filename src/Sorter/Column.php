@@ -107,7 +107,7 @@ class Column implements SplSubject
 
         $result = [];
 
-        if (\count($orderSettings) !== 2) {
+        if (count($orderSettings) !== 2) {
             throw new InvalidArgumentException();
         }
 
@@ -115,7 +115,7 @@ class Column implements SplSubject
             $this->validateDirection($direction);
 
             foreach ($fields as $field => $fieldDirection) {
-                if (\is_int($field)) {
+                if (is_int($field)) {
                     $result[$direction][$fieldDirection] = $direction;
                 } else {
                     $this->validateDirection($fieldDirection);
@@ -129,7 +129,7 @@ class Column implements SplSubject
 
     private function validateDirection($direction): void
     {
-        if (!\in_array($direction, [Sorter::SORT_ASC, Sorter::SORT_DESC], true)) {
+        if (!in_array($direction, [Sorter::SORT_ASC, Sorter::SORT_DESC], true)) {
             throw new InvalidArgumentException(sprintf('Invalid direction - %s', $direction));
         }
     }

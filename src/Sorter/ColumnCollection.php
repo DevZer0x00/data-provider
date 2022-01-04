@@ -75,7 +75,7 @@ class ColumnCollection implements Countable, IteratorAggregate, SplObserver, Spl
 
     public function count()
     {
-        return \count($this->columns);
+        return count($this->columns);
     }
 
     public function update(SplSubject $subject): void

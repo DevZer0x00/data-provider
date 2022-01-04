@@ -33,7 +33,9 @@ class Paginator implements SplSubject
             ->setAllowedTypes('currentPage', 'int')
             ->setAllowedTypes('totalCount', 'int');
 
-        $resolver->setAllowedValues('pageSize', fn ($value) => $value > 0)->setAllowedValues('currentPage', fn ($value) => $value >= 1)->setAllowedValues('totalCount', fn ($value) => $value >= 0);
+        $resolver->setAllowedValues('pageSize', fn ($value) => $value > 0)
+            ->setAllowedValues('currentPage', fn ($value) => $value >= 1)
+            ->setAllowedValues('totalCount', fn ($value) => $value >= 0);
 
         return $resolver;
     }
@@ -115,6 +117,6 @@ class Paginator implements SplSubject
 
     public function getPageCount(): int
     {
-        return (int) ceil($this->totalCount / $this->pageSize);
+        return (int)ceil($this->totalCount / $this->pageSize);
     }
 }

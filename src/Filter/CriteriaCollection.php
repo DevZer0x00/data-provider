@@ -50,7 +50,7 @@ class CriteriaCollection implements Countable, IteratorAggregate, SplObserver, S
 
     public function count()
     {
-        return \count($this->criteria);
+        return count($this->criteria);
     }
 
     /**
