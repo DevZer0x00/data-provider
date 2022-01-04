@@ -4,26 +4,30 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit;
 
+use ArrayIterator;
+use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\ArrayDataProvider;
 use DevZer0x00\DataProvider\Filter;
+use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
+use DevZer0x00\DataProvider\Filter\CriteriaCollection;
 use DevZer0x00\DataProvider\Paginator;
 use DevZer0x00\DataProvider\Sorter;
 use Doctrine\Common\Collections\Criteria;
-use ArrayIterator;
-use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
-use DevZer0x00\DataProvider\Filter\CriteriaCollection;
-use Codeception\Test\Unit;
 
-class ArrayDataProviderTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ArrayDataProviderTest extends Unit
 {
-    public function testPaginator()
+    public function testPaginator(): void
     {
         $originalData = [
             [1],
             [2],
             [3],
             [4],
-            [5]
+            [5],
         ];
 
         $paginator = $this->createMock(Paginator::class);
@@ -54,7 +58,7 @@ class ArrayDataProviderTest extends Unit
         $paginator = $this->createMock(Paginator::class);
         $paginator->expects($this->once())
             ->method('setTotalCount')
-            ->with(count($originalData));
+            ->with(\count($originalData));
         $paginator->expects($this->once())
             ->method('attach')
             ->with($provider);
@@ -70,7 +74,7 @@ class ArrayDataProviderTest extends Unit
         $provider->setPaginator(null);
     }
 
-    public function testSort()
+    public function testSort(): void
     {
         $arr = [
             ['c1' => 1, 'c2' => 3, 'c3' => 7],
@@ -148,7 +152,7 @@ class ArrayDataProviderTest extends Unit
         $this->assertEquals($arr, $provider->getData());
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $provider = new ArrayDataProvider();
 

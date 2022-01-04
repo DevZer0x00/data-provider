@@ -10,6 +10,5 @@ class Configurator
 {
     public function configurePaginator(Paginator $paginator, ParamHandlerInterface $paramHandler): void
     {
-        
     }
 }

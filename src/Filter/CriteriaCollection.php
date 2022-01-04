@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Filter;
 
+use ArrayIterator;
+use Countable;
 use DevZer0x00\DataProvider\Exception\NonUniqueCriteriaException;
 use DevZer0x00\DataProvider\Traits\ObserverableTrait;
 use IteratorAggregate;
-use ArrayIterator;
-use Countable;
-use SplSubject;
 use SplObserver;
+use SplSubject;
 
-class CriteriaCollection implements IteratorAggregate, Countable, SplSubject, SplObserver
+class CriteriaCollection implements Countable, IteratorAggregate, SplObserver, SplSubject
 {
     use ObserverableTrait;
 
@@ -26,7 +26,7 @@ class CriteriaCollection implements IteratorAggregate, Countable, SplSubject, Sp
             $this->addCriteria($criteria);
         }
     }
-    
+
     public function addCriteria(CriteriaAbstract $criteriaAbstract): self
     {
         if (isset($this->criteria[$criteriaAbstract->getName()])) {
@@ -50,13 +50,13 @@ class CriteriaCollection implements IteratorAggregate, Countable, SplSubject, Sp
 
     public function count()
     {
-        return count($this->criteria);
+        return \count($this->criteria);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject): void
     {
         $this->notify();
     }

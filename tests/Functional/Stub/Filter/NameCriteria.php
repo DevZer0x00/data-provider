@@ -21,7 +21,7 @@ class NameCriteria extends CriteriaAbstract
         return $this->value;
     }
 
-    public function setValue(?string $value): NameCriteria
+    public function setValue(?string $value): self
     {
         $this->value = $value;
 

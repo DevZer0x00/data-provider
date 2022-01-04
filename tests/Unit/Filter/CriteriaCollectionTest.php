@@ -4,28 +4,32 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 
+use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Exception\NonUniqueCriteriaException;
 use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use DevZer0x00\DataProvider\Filter\CriteriaCollection;
 use SplObserver;
-use Codeception\Test\Unit;
 
-class CriteriaCollectionTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class CriteriaCollectionTest extends Unit
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $criteria = $this->getMockForAbstractClass(CriteriaAbstract::class, ['test']);
         $criteria1 = $this->getMockForAbstractClass(CriteriaAbstract::class, ['test1']);
 
         $collection = new CriteriaCollection([
             $criteria,
-            $criteria1
+            $criteria1,
         ]);
 
         $this->assertCount(2, $collection);
     }
 
-    public function testConstructNonUniqueName()
+    public function testConstructNonUniqueName(): void
     {
         $this->expectException(NonUniqueCriteriaException::class);
 
@@ -34,11 +38,11 @@ class CriteriaCollectionTest extends Unit
 
         new CriteriaCollection([
             $criteria,
-            $criteria1
+            $criteria1,
         ]);
     }
 
-    public function testAddCriteria()
+    public function testAddCriteria(): void
     {
         $collection = new CriteriaCollection();
 
@@ -51,7 +55,7 @@ class CriteriaCollectionTest extends Unit
         $this->assertCount(2, $collection);
     }
 
-    public function testAddCriteriaNonUniqueName()
+    public function testAddCriteriaNonUniqueName(): void
     {
         $this->expectException(NonUniqueCriteriaException::class);
 
@@ -60,7 +64,7 @@ class CriteriaCollectionTest extends Unit
         $collection->addCriteria($this->getMockForAbstractClass(CriteriaAbstract::class, ['t']));
     }
 
-    public function testEvents()
+    public function testEvents(): void
     {
         $collection = new CriteriaCollection();
 
@@ -77,7 +81,7 @@ class CriteriaCollectionTest extends Unit
 
         $collection->attach($observer);
 
-        $criteria = $this->getMockForAbstractClass(CriteriaAbstract::class, ['t'],'',true,true,true,['attach']);
+        $criteria = $this->getMockForAbstractClass(CriteriaAbstract::class, ['t'], '', true, true, true, ['attach']);
         $criteria->expects($this->once())
             ->method('attach')
             ->with($collection);

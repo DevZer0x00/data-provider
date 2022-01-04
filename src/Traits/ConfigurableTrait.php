@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace DevZer0x00\DataProvider\Traits;
 
 use DevZer0x00\DataProvider\Exception\ConfigException;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 
 trait ConfigurableTrait
 {

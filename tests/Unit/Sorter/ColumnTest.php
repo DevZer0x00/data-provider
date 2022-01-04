@@ -4,28 +4,32 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 
-use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
-use DevZer0x00\DataProvider\Sorter\Column;
-use DevZer0x00\DataProvider\Sorter;
 use Codeception\Test\Unit;
+use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
+use DevZer0x00\DataProvider\Sorter;
+use DevZer0x00\DataProvider\Sorter\Column;
 
-class ColumnTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ColumnTest extends Unit
 {
-    public function testName()
+    public function testName(): void
     {
         $column = new Column('test');
 
         $this->assertEquals('test', $column->getName());
     }
 
-    public function testConstructorEmptyName()
+    public function testConstructorEmptyName(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         new Column('');
     }
 
-    public function testDirection()
+    public function testDirection(): void
     {
         $column = new Column('test');
         $this->assertNull($column->getDirection());
@@ -39,7 +43,7 @@ class ColumnTest extends Unit
         $this->assertEquals(Sorter::SORT_ASC, $column->getDirection());
     }
 
-    public function testInvalidSetDirection()
+    public function testInvalidSetDirection(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -47,7 +51,7 @@ class ColumnTest extends Unit
         $column->setDirection('test');
     }
 
-    public function testOrderSettingsWithoutCustomSettings()
+    public function testOrderSettingsWithoutCustomSettings(): void
     {
         $column = new Column('test');
 
@@ -58,26 +62,26 @@ class ColumnTest extends Unit
         $this->assertEquals(['test' => Sorter::SORT_DESC], $column->getOrderByFields());
     }
 
-    public function testOrderMultipleFieldsSettings()
+    public function testOrderMultipleFieldsSettings(): void
     {
         $column = new Column('test', [
             Sorter::SORT_ASC => [
                 'field1' => Sorter::SORT_DESC,
                 'field2' => Sorter::SORT_ASC,
-                'field3'
+                'field3',
             ],
             Sorter::SORT_DESC => [
                 'field1',
                 'field2' => Sorter::SORT_ASC,
-                'field4'
-            ]
+                'field4',
+            ],
         ]);
 
         $column->setDirection(Sorter::SORT_ASC);
         $asc = [
             'field1' => Sorter::SORT_DESC,
             'field2' => Sorter::SORT_ASC,
-            'field3' => Sorter::SORT_ASC
+            'field3' => Sorter::SORT_ASC,
         ];
 
         $this->assertEquals($asc, $column->getOrderByFields());
@@ -86,16 +90,15 @@ class ColumnTest extends Unit
         $desc = [
             'field1' => Sorter::SORT_DESC,
             'field2' => Sorter::SORT_ASC,
-            'field4' => Sorter::SORT_DESC
+            'field4' => Sorter::SORT_DESC,
         ];
         $this->assertEquals($desc, $column->getOrderByFields());
     }
 
     /**
      * @dataProvider getInvalidFieldsSettings
-     * @param array $settings
      */
-    public function testInvalidFieldsSettings(array $settings)
+    public function testInvalidFieldsSettings(array $settings): void
     {
         $this->expectException(InvalidArgumentException::class);
         new Column('test', $settings);
@@ -113,19 +116,19 @@ class ColumnTest extends Unit
             [
                 [
                     Sorter::SORT_ASC => ['f1', 'f2'],
-                    ['f1', 'f2']
-                ]
+                    ['f1', 'f2'],
+                ],
             ],
             [
                 [
                     Sorter::SORT_ASC => ['f1' => 'test'],
-                    Sorter::SORT_DESC => []
-                ]
-            ]
+                    Sorter::SORT_DESC => [],
+                ],
+            ],
         ];
     }
 
-    public function testEvents()
+    public function testEvents(): void
     {
         $observer = $this->createMock(\SplObserver::class);
         $observer->expects($this->any())
@@ -136,14 +139,14 @@ class ColumnTest extends Unit
                         $this->assertEquals(Sorter::SORT_DESC, $column->getDirection());
 
                         return true;
-                    })
+                    }),
                 ],
                 [
                     $this->callback(function (Column $column) {
                         $this->assertEquals(Sorter::SORT_ASC, $column->getDirection());
 
                         return true;
-                    })
+                    }),
                 ],
             );
 
@@ -155,4 +158,3 @@ class ColumnTest extends Unit
         $column->setDirection(Sorter::SORT_ASC);
     }
 }
-

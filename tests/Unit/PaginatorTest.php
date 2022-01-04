@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit;
 
+use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Exception\ConfigException;
 use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Paginator;
 use Throwable;
-use Codeception\Test\Unit;
 
-class PaginatorTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class PaginatorTest extends Unit
 {
-    public function testPageSize()
+    public function testPageSize(): void
     {
         $paginator = new Paginator();
 
@@ -22,8 +26,10 @@ class PaginatorTest extends Unit
 
     /**
      * @dataProvider getInvalidPageSize
+     *
+     * @param mixed $size
      */
-    public function testInvalidPageSize($size)
+    public function testInvalidPageSize($size): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -39,7 +45,7 @@ class PaginatorTest extends Unit
         ];
     }
 
-    public function testCurrentPage()
+    public function testCurrentPage(): void
     {
         $paginator = new Paginator();
         $paginator->setCurrentPage(4);
@@ -50,7 +56,7 @@ class PaginatorTest extends Unit
     /**
      * @dataProvider getInvalidCurrentPage
      */
-    public function testInvalidCurrentPage(int $page)
+    public function testInvalidCurrentPage(int $page): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -66,7 +72,7 @@ class PaginatorTest extends Unit
         ];
     }
 
-    public function testTotalCount()
+    public function testTotalCount(): void
     {
         $paginator = new Paginator();
         $paginator->setTotalCount(5);
@@ -80,7 +86,7 @@ class PaginatorTest extends Unit
         }
     }
 
-    public function testGetPageCount()
+    public function testGetPageCount(): void
     {
         $paginator = new Paginator();
 
@@ -94,7 +100,7 @@ class PaginatorTest extends Unit
         $this->assertEquals(4, $paginator->getPageCount());
     }
 
-    public function testConstructorConfig()
+    public function testConstructorConfig(): void
     {
         $paginator = new Paginator([
             'pageSize' => 2,
@@ -108,7 +114,7 @@ class PaginatorTest extends Unit
 
         try {
             $paginator = new Paginator([
-                'pageSize' => -1
+                'pageSize' => -1,
             ]);
         } catch (Throwable $e) {
             $this->assertInstanceOf(ConfigException::class, $e);
@@ -116,7 +122,7 @@ class PaginatorTest extends Unit
 
         try {
             $paginator = new Paginator([
-                'pageSize' => -1
+                'pageSize' => -1,
             ]);
         } catch (Throwable $e) {
             $this->assertInstanceOf(ConfigException::class, $e);
@@ -124,14 +130,14 @@ class PaginatorTest extends Unit
 
         try {
             $paginator = new Paginator([
-                'totalCount' => -1
+                'totalCount' => -1,
             ]);
         } catch (Throwable $e) {
             $this->assertInstanceOf(ConfigException::class, $e);
         }
     }
 
-    public function testEvents()
+    public function testEvents(): void
     {
         $observer = $this->createMock(\SplObserver::class);
 
@@ -143,28 +149,28 @@ class PaginatorTest extends Unit
                         $this->assertEquals(2, $paginator->getPageSize());
 
                         return true;
-                    })
+                    }),
                 ],
                 [
                     $this->callback(function (Paginator $paginator) {
                         $this->assertEquals(3, $paginator->getPageSize());
 
                         return true;
-                    })
+                    }),
                 ],
                 [
                     $this->callback(function (Paginator $paginator) {
                         $this->assertEquals(3, $paginator->getCurrentPage());
 
                         return true;
-                    })
+                    }),
                 ],
                 [
                     $this->callback(function (Paginator $paginator) {
                         $this->assertEquals(4, $paginator->getCurrentPage());
 
                         return true;
-                    })
+                    }),
                 ]
             );
 

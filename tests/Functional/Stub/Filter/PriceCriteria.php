@@ -23,7 +23,7 @@ class PriceCriteria extends CriteriaAbstract
         return $this->minPrice;
     }
 
-    public function setMinPrice(?float $minPrice): PriceCriteria
+    public function setMinPrice(?float $minPrice): self
     {
         $this->minPrice = $minPrice;
 
@@ -37,7 +37,7 @@ class PriceCriteria extends CriteriaAbstract
         return $this->maxPrice;
     }
 
-    public function setMaxPrice(?float $maxPrice): PriceCriteria
+    public function setMaxPrice(?float $maxPrice): self
     {
         $this->maxPrice = $maxPrice;
 

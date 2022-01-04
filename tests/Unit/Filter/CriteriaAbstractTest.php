@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 
-use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use Codeception\Test\Unit;
+use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 
-class CriteriaAbstractTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class CriteriaAbstractTest extends Unit
 {
-    public function testGetName()
+    public function testGetName(): void
     {
         $criteria = $this->getMockForAbstractClass(CriteriaAbstract::class, ['t']);
 

@@ -7,17 +7,18 @@ namespace DevZer0x00\DataProvider;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
 use DevZer0x00\DataProvider\Traits\ConfigurableTrait;
 use DevZer0x00\DataProvider\Traits\ObserverableTrait;
+use SplObserver;
 use SplSubject;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use SplObserver;
 
 class Sorter implements SplObserver, SplSubject
 {
-    use ConfigurableTrait, ObserverableTrait;
+    use ConfigurableTrait;
+    use ObserverableTrait;
 
-    const SORT_ASC = 'asc';
+    public const SORT_ASC = 'asc';
 
-    const SORT_DESC = 'desc';
+    public const SORT_DESC = 'desc';
 
     private ColumnCollection $columnCollection;
 
@@ -35,7 +36,7 @@ class Sorter implements SplObserver, SplSubject
         return $resolver;
     }
 
-    public function setColumnCollection(ColumnCollection $columnCollection): Sorter
+    public function setColumnCollection(ColumnCollection $columnCollection): self
     {
         $oldCollection = $this->columnCollection ?? null;
 
@@ -60,7 +61,7 @@ class Sorter implements SplObserver, SplSubject
         return $this->multiSortable;
     }
 
-    public function setMultiSortable(bool $flag): Sorter
+    public function setMultiSortable(bool $flag): self
     {
         $oldFlag = $this->multiSortable ?? null;
 
@@ -80,7 +81,7 @@ class Sorter implements SplObserver, SplSubject
         return $this->isMultiSortable() ? $sortable : $sortable->reduceToFirstColumn();
     }
 
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject): void
     {
         $this->notify();
     }

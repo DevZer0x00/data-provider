@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit;
 
+use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Sorter;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
-use Codeception\Test\Unit;
 
-class SorterTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class SorterTest extends Unit
 {
-    public function testMultiSortable()
+    public function testMultiSortable(): void
     {
         $sorter = new Sorter(['multiSortable' => true]);
 
@@ -20,7 +24,7 @@ class SorterTest extends Unit
         $this->assertTrue($sorter->isMultiSortable());
     }
 
-    public function testGetSortableColumns()
+    public function testGetSortableColumns(): void
     {
         $sorter = new Sorter();
 
@@ -44,10 +48,10 @@ class SorterTest extends Unit
         $sorter->getSortableColumns();
     }
 
-    public function testEvents()
+    public function testEvents(): void
     {
         $sorter = new Sorter([
-            'multiSortable' => false
+            'multiSortable' => false,
         ]);
 
         $observer = $this->createMock(\SplObserver::class);

@@ -34,7 +34,7 @@ abstract class DataProviderAbstract implements DataProviderInterface, SplObserve
         return $resolver;
     }
 
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject): void
     {
         $this->refresh();
     }
