@@ -1,5 +1,6 @@
 .idea
 .cache
+.ps_cs.cache
 /vendor/
 composer.lock
 coverage.xml

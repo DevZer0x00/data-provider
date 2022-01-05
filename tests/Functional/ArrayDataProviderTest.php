@@ -12,9 +12,13 @@ use DevZer0x00\DataProvider\Tests\Functional\Stub\Filter\NameCriteria;
 use DevZer0x00\DataProvider\Tests\Functional\Stub\Filter\PriceCriteria;
 use PHPUnit\Framework\TestCase;
 
-class ArrayDataProviderTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ArrayDataProviderTest extends TestCase
 {
-    public function testPaginatorGetData()
+    public function testPaginatorGetData(): void
     {
         $sorter = new Sorter();
         $sorter->setColumnCollection(new Sorter\ColumnCollection());
@@ -32,7 +36,7 @@ class ArrayDataProviderTest extends TestCase
             'filter' => $filter,
             'sorter' => $sorter,
             'paginator' => $paginator,
-            'originalData' => $originalData
+            'originalData' => $originalData,
         ]);
 
         $this->assertEquals($originalData, $provider->getData());
@@ -47,7 +51,7 @@ class ArrayDataProviderTest extends TestCase
         $this->assertEquals([end($originalData)], $provider->getData());
     }
 
-    public function testFilterGetData()
+    public function testFilterGetData(): void
     {
         $nameCriteria = new NameCriteria();
 
@@ -72,13 +76,13 @@ class ArrayDataProviderTest extends TestCase
                     'name' => 'test',
                     'qty' => 10,
                     'price' => 12.3,
-                    'status' => 'enabled'
+                    'status' => 'enabled',
                 ],
                 [
                     'name' => 'test',
                     'qty' => 0,
                     'price' => 0.54,
-                    'status' => 'disabled'
+                    'status' => 'disabled',
                 ],
             ],
             $provider->getData()
@@ -95,7 +99,7 @@ class ArrayDataProviderTest extends TestCase
                     'name' => 'test',
                     'qty' => 10,
                     'price' => 12.3,
-                    'status' => 'enabled'
+                    'status' => 'enabled',
                 ],
             ],
             $provider->getData()
@@ -113,31 +117,31 @@ class ArrayDataProviderTest extends TestCase
                 'name' => 'test',
                 'qty' => 10,
                 'price' => 12.3,
-                'status' => 'enabled'
+                'status' => 'enabled',
             ],
             [
                 'name' => 'qwerty1',
                 'qty' => 4,
                 'price' => 100,
-                'status' => 'enabled'
+                'status' => 'enabled',
             ],
             [
                 'name' => 'test',
                 'qty' => 0,
                 'price' => 0.54,
-                'status' => 'disabled'
+                'status' => 'disabled',
             ],
             [
                 'name' => 'qwerty',
                 'qty' => 4,
                 'price' => 100,
-                'status' => 'enabled'
+                'status' => 'enabled',
             ],
             [
                 'name' => 'asdfasdf',
                 'qty' => 54,
                 'price' => 1,
-                'status' => 'status'
+                'status' => 'status',
             ],
         ];
     }

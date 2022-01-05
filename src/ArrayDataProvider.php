@@ -15,7 +15,7 @@ class ArrayDataProvider extends DataProviderAbstract
     private array $originalData = [];
 
     /**
-     * @var callable|null
+     * @var null|callable
      */
     private $sortCallback;
 

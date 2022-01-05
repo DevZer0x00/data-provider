@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit;
 
+use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Filter;
 use DevZer0x00\DataProvider\Filter\CriteriaCollection;
-use Codeception\Test\Unit;
 
-class FilterTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class FilterTest extends Unit
 {
-    public function testSetCollection()
+    public function testSetCollection(): void
     {
         $collection = $this->createMock(CriteriaCollection::class);
 
@@ -24,7 +28,7 @@ class FilterTest extends Unit
         $this->assertSame($collection, $filter->getCriteriaCollection());
     }
 
-    public function testEvents()
+    public function testEvents(): void
     {
         $filter = new Filter();
 

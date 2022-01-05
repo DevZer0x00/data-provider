@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace DevZer0x00\DataProvider\Tests;
 
 /**
- * Inherited Methods
+ * Inherited Methods.
+ *
  * @method void wantToTest($text)
  * @method void wantTo($text)
  * @method void execute($callable)
@@ -15,12 +19,10 @@ namespace DevZer0x00\DataProvider\Tests;
  * @method void pause()
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class FunctionalTester extends \Codeception\Actor
 {
     use _generated\FunctionalTesterActions;
 
-    /**
-     * Define custom actions here
-     */
+    // Define custom actions here
 }

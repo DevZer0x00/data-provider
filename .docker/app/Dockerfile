@@ -19,7 +19,7 @@ RUN apk add --update --no-cache \
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.2.3 /usr/bin/composer /usr/bin/composer
 COPY entrypoint.sh /
 
 WORKDIR /var/www/html

@@ -7,13 +7,14 @@ namespace DevZer0x00\DataProvider;
 use DevZer0x00\DataProvider\Filter\CriteriaCollection;
 use DevZer0x00\DataProvider\Traits\ConfigurableTrait;
 use DevZer0x00\DataProvider\Traits\ObserverableTrait;
-use SplSubject;
 use SplObserver;
+use SplSubject;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Filter implements SplSubject, SplObserver
+class Filter implements SplObserver, SplSubject
 {
-    use ObserverableTrait, ConfigurableTrait;
+    use ConfigurableTrait;
+    use ObserverableTrait;
 
     private CriteriaCollection $criteriaCollection;
 
@@ -31,7 +32,7 @@ class Filter implements SplSubject, SplObserver
         return $this->criteriaCollection;
     }
 
-    public function setCriteriaCollection(CriteriaCollection $criteriaCollection): Filter
+    public function setCriteriaCollection(CriteriaCollection $criteriaCollection): self
     {
         $oldCollection = $this->criteriaCollection ?? null;
 
@@ -52,9 +53,9 @@ class Filter implements SplSubject, SplObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject): void
     {
         $this->notify();
     }

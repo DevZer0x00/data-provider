@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Tests\Unit\Sorter;
 
+use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
 use DevZer0x00\DataProvider\Sorter\Column;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
-use Codeception\Test\Unit;
 
-class ColumnCollectionTest extends Unit
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ColumnCollectionTest extends Unit
 {
-    public function testAdd()
+    public function testAdd(): void
     {
         $collection = new ColumnCollection();
 
@@ -22,7 +26,7 @@ class ColumnCollectionTest extends Unit
         $this->assertCount(1, $collection);
     }
 
-    public function testNonUniqueException()
+    public function testNonUniqueException(): void
     {
         $this->expectException(NonUniqueColumnException::class);
 
@@ -37,7 +41,7 @@ class ColumnCollectionTest extends Unit
         $collection->add($column2);
     }
 
-    public function testFindSortable()
+    public function testFindSortable(): void
     {
         $collection = new ColumnCollection();
 
@@ -61,7 +65,7 @@ class ColumnCollectionTest extends Unit
         $this->assertCount(1, $collection->reduceToFirstColumn());
     }
 
-    public function testFirst()
+    public function testFirst(): void
     {
         $collection = new ColumnCollection();
 
@@ -75,7 +79,7 @@ class ColumnCollectionTest extends Unit
         $this->assertSame($column, $collection->first());
     }
 
-    public function testReduceToFirst()
+    public function testReduceToFirst(): void
     {
         $collection = new ColumnCollection();
 
@@ -93,13 +97,13 @@ class ColumnCollectionTest extends Unit
         $this->assertSame($column1, $collection->reduceToFirstColumn()->first());
     }
 
-    public function testEvents()
+    public function testEvents(): void
     {
         $collection = new ColumnCollection();
 
         $observer = $this->createMock(\SplObserver::class);
         $observer->expects($this->once())->method('update')->with(
-            $this->callback(function(ColumnCollection $collection) {
+            $this->callback(function (ColumnCollection $collection) {
                 $this->assertCount(1, $collection);
 
                 return true;

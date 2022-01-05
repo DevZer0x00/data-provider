@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DevZer0x00\DataProvider\Sorter;
 
-use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
 use ArrayIterator;
+use Countable;
+use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
 use DevZer0x00\DataProvider\Traits\ObserverableTrait;
 use IteratorAggregate;
-use Countable;
 use SplObserver;
 use SplSubject;
 
-class ColumnCollection implements IteratorAggregate, Countable, SplObserver, SplSubject
+class ColumnCollection implements Countable, IteratorAggregate, SplObserver, SplSubject
 {
     use ObserverableTrait;
 
@@ -28,7 +28,7 @@ class ColumnCollection implements IteratorAggregate, Countable, SplObserver, Spl
         }
     }
 
-    public function add(Column $column)
+    public function add(Column $column): void
     {
         if (isset($this->columns[$column->getName()])) {
             throw new NonUniqueColumnException(
@@ -73,13 +73,12 @@ class ColumnCollection implements IteratorAggregate, Countable, SplObserver, Spl
         return new ArrayIterator($this->columns);
     }
 
-
     public function count()
     {
         return count($this->columns);
     }
 
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject): void
     {
         $this->notify();
     }

@@ -32,25 +32,21 @@ class Column implements SplSubject
     }
 
     /**
-     * Возвращает имя колонки
-     *
-     * @return string
+     * Возвращает имя колонки.
      */
     public function getName(): string
     {
         return $this->name;
     }
 
-    public function isSorted() : bool
+    public function isSorted(): bool
     {
-        return !is_null($this->getDirection());
+        return $this->getDirection() !== null;
     }
 
     /**
      * Возвращает текущее направление сортировки, или null - если на данный момент
-     * по колонке нету сортировки
-     *
-     * @return string|null
+     * по колонке нету сортировки.
      */
     public function getDirection(): ?string
     {
@@ -60,7 +56,7 @@ class Column implements SplSubject
     /**
      * Возвращает поля для сортировки, если таковые имеются на данный момент.
      *
-     * @return array|null Return ["field1" => Sorter::SORT_DESC, "field2" => Sorter::SORT_ASC ...]
+     * @return null|array Return ["field1" => Sorter::SORT_DESC, "field2" => Sorter::SORT_ASC ...]
      */
     public function getOrderByFields(): ?array
     {
@@ -74,14 +70,13 @@ class Column implements SplSubject
     }
 
     /**
-     * Устанавливает направление сортировки
-     *
-     * @param string|null $direction
-     * @return $this
+     * Устанавливает направление сортировки.
      *
      * @throws InvalidArgumentException
+     *
+     * @return $this
      */
-    public function setDirection(?string $direction): Column
+    public function setDirection(?string $direction): self
     {
         if ($direction !== null) {
             $this->validateDirection($direction);
@@ -102,10 +97,10 @@ class Column implements SplSubject
         if (empty($orderSettings)) {
             return [
                 Sorter::SORT_ASC => [
-                    $this->name => Sorter::SORT_ASC
+                    $this->name => Sorter::SORT_ASC,
                 ],
                 Sorter::SORT_DESC => [
-                    $this->name => Sorter::SORT_DESC
+                    $this->name => Sorter::SORT_DESC,
                 ],
             ];
         }
