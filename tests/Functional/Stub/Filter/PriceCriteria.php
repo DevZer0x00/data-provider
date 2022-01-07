@@ -13,9 +13,9 @@ class PriceCriteria extends CriteriaAbstract
 
     private ?float $maxPrice;
 
-    public function __construct()
+    public function __construct(string $field = 'price')
     {
-        parent::__construct('price');
+        parent::__construct($field);
     }
 
     public function getMinPrice(): ?float

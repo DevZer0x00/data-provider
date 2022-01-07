@@ -7,21 +7,21 @@ namespace DevZer0x00\DataProvider\Tests\Functional\Stub\Filter;
 use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use Doctrine\Common\Collections\Criteria;
 
-class NameCriteria extends CriteriaAbstract
+class FilmIdCriteria extends CriteriaAbstract
 {
-    private ?string $value;
+    private ?array $value;
 
     public function __construct()
     {
-        parent::__construct('name');
+        parent::__construct('film_id');
     }
 
-    public function getValue(): ?string
+    public function getValue(): ?array
     {
         return $this->value;
     }
 
-    public function setValue(?string $value): self
+    public function setValue(?array $value): self
     {
         $this->value = $value;
 
@@ -35,7 +35,7 @@ class NameCriteria extends CriteriaAbstract
         $criteria = new Criteria();
 
         if (!empty($this->value)) {
-            $criteria->where($criteria::expr()->eq('name', $this->getValue()));
+            $criteria->where($criteria::expr()->in('film_id', $this->getValue()));
         }
 
         return $criteria;

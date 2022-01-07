@@ -10,6 +10,7 @@ use SplSubject;
 
 abstract class CriteriaAbstract implements SplSubject
 {
+    // @TODO дописать обсервер
     use ObserverableTrait;
 
     private string $name;
