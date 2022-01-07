@@ -16,6 +16,7 @@ $config = (new PhpCsFixer\Config())
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
         'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'alpha'],
         'ordered_interfaces' => ['order' => 'alpha', 'direction' => 'ascend'],
+        'blank_line_before_statement' => ['statements' => ['break', 'continue', 'do', 'for', 'foreach', 'if', 'while', 'exit',  'return', 'switch', 'try', 'declare']],
         'linebreak_after_opening_tag' => true,
         'mb_str_functions' => true,
         'no_php4_constructor' => true,
