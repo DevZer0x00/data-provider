@@ -6,6 +6,7 @@ namespace DevZer0x00\DataProvider\Doctrine;
 
 use DevZer0x00\DataProvider\DataProviderAbstract;
 use DevZer0x00\DataProvider\Doctrine\DbalDataProvider\QueryBuilderCriteriaProcessor;
+use DevZer0x00\DataProvider\Doctrine\DbalDataProvider\SqlExpressionVisitor;
 use DevZer0x00\DataProvider\Sorter\Column;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -51,7 +52,7 @@ class DbalDataProvider extends DataProviderAbstract
         }
 
         if ($filter = $this->getFilter()) {
-            $criteriaProcessor = new QueryBuilderCriteriaProcessor($qb);
+            $criteriaProcessor = new QueryBuilderCriteriaProcessor($qb, new SqlExpressionVisitor($qb));
             $criteriaProcessor->processCollection($filter->getCriteriaCollection());
         }
 

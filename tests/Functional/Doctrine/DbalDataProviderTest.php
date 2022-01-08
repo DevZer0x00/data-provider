@@ -11,6 +11,8 @@ use DevZer0x00\DataProvider\Filter;
 use DevZer0x00\DataProvider\Paginator;
 use DevZer0x00\DataProvider\Sorter;
 use DevZer0x00\DataProvider\Tests\Functional\Stub\Filter\FilmIdCriteria;
+use DevZer0x00\DataProvider\Tests\Functional\Stub\Filter\RentalDuration;
+use DevZer0x00\DataProvider\Tests\Functional\Stub\Filter\TitleCriteria;
 use DevZer0x00\DataProvider\Tests\FunctionalTester;
 use Doctrine\DBAL\Query\QueryBuilder;
 
@@ -117,7 +119,7 @@ final class DbalDataProviderTest extends Unit
     public function testFilter(): void
     {
         $qb = $this->createQueryBuilderWithJoin();
-        $qb->andWhere('f.film_id IN (1,2,3,4,5)');
+        $qb->andWhere('f.film_id IN (1,2,3,4,5) AND f.title = "ACE GOLDFINGER"');
 
         $filter = new Filter();
         $filmIdCriteria = new FilmIdCriteria();
@@ -125,7 +127,17 @@ final class DbalDataProviderTest extends Unit
             1, 2, 3, 4, 5,
         ]);
 
-        $filter->setCriteriaCollection(new Filter\CriteriaCollection([$filmIdCriteria]));
+        $titleCriteria = new TitleCriteria();
+        $titleCriteria->setValue('ACE GOLDFINGER');
+
+        $rentalDuration = new RentalDuration();
+        $rentalDuration->setMinDuration(3)->setMaxDuration(5);
+
+        $filter->setCriteriaCollection(new Filter\CriteriaCollection([
+            $filmIdCriteria,
+            $titleCriteria,
+            $rentalDuration,
+        ]));
 
         $provider = new DbalDataProvider(['queryBuilder' => $this->createQueryBuilderWithJoin()]);
         $provider->setFilter($filter);
