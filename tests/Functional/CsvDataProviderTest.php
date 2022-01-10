@@ -6,7 +6,6 @@ namespace DevZer0x00\DataProvider\Tests\Functional;
 
 use DevZer0x00\DataProvider\CsvDataProvider;
 use DevZer0x00\DataProvider\Exception\ColumnCountException;
-use DevZer0x00\DataProvider\Exception\FailReadStreamException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,20 +39,6 @@ final class CsvDataProviderTest extends TestCase
         $stream = fopen('php://memory', 'r+');
         fwrite($stream, "id; name; value \r test_name_1; test_value_1 \r 2; test_name_2; test_value_2 \r");
         fseek($stream, 0);
-
-        $provider = new CsvDataProvider([
-            'sourceStream' => $stream,
-        ]);
-
-        $provider->getData();
-    }
-
-    public function testFailReadStreamException(): void
-    {
-        $this->expectException(FailReadStreamException::class);
-
-        $stream = fopen('php://memory', 'r+');
-        fwrite($stream, "id; name; value \r test_name_1; test_value_1 \r 2; test_name_2; test_value_2 \r");
 
         $provider = new CsvDataProvider([
             'sourceStream' => $stream,

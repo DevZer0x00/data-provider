@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DevZer0x00\DataProvider;
 
 use DevZer0x00\DataProvider\Exception\ColumnCountException;
-use DevZer0x00\DataProvider\Exception\FailReadStreamException;
+use DevZer0x00\DataProvider\Exception\ReadStreamErrorException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CsvDataProvider extends DataProviderAbstract
@@ -14,39 +14,43 @@ class CsvDataProvider extends DataProviderAbstract
 
     private string $colDelimiter;
 
+    private array $encodings;
+
     private function parseData()
     {
         $content = trim(stream_get_contents($this->sourceStream));
 
-        if (!$content) {
-            throw new FailReadStreamException('Failed to get data from stream');
+        if ($content === false) {
+            throw new ReadStreamErrorException('Failed to get data from stream');
         }
 
-        $encodings = ['cp1251', 'UTF-8'];
-
-        $encodedContent = mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content, $encodings, true));
+        $encodedContent = mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content, $this->encodings, true));
         $encodedContent = str_replace(["\r\n", "\r", "\n"], "\n", $encodedContent);
 
         unset($content);
 
-        $lines = explode("\n", trim($encodedContent));
+        $lines = explode("\n", $encodedContent);
         $lines = array_filter($lines);
         $lines = array_map('trim', $lines);
 
-        $title = str_getcsv($lines[0], $this->colDelimiter);
-        $columnCount = count($title);
+        $titles = str_getcsv($lines[0], $this->colDelimiter);
+        $columnCount = count($titles);
         unset($lines[0]);
         $lines = array_values($lines);
 
         $data = [];
+
         foreach ($lines as $key => $line) {
             $lineArr = str_getcsv($line, $this->colDelimiter);
+
             if (count($lineArr) < $columnCount) {
                 throw new ColumnCountException('Wrong number of filled columns');
             }
+
             foreach ($lineArr as $index => $columnValue) {
-                $data[$key][trim($title[$index])] = trim($columnValue);
+                $data[$key][trim($titles[$index])] = trim($columnValue);
             }
+
             unset($lines[$key]);
         }
 
@@ -71,10 +75,20 @@ class CsvDataProvider extends DataProviderAbstract
         return $this;
     }
 
+    public function setEncodings(array $encodings): self
+    {
+        $this->refresh();
+
+        $this->encodings = $encodings;
+
+        return $this;
+    }
+
     protected function configureOptions(OptionsResolver $resolver): OptionsResolver
     {
         return parent::configureOptions($resolver)
             ->setDefault('colDelimiter', ';')
+            ->setDefault('encodings', ['cp1251', 'UTF-8'])
             ->setDefined(['sourceStream', 'sortCallback'])
             ->setAllowedTypes('sourceStream', 'resource')
             ->setAllowedTypes('sortCallback', ['null', 'callable']);
@@ -88,10 +102,8 @@ class CsvDataProvider extends DataProviderAbstract
 
         $this->initialized = true;
 
-        $data = $this->parseData();
-
         $arrayDataProvider = new ArrayDataProvider([
-            'originalData' => $data,
+            'originalData' => $this->parseData(),
         ]);
 
         $this->data = $arrayDataProvider->getData();
