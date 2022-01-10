@@ -54,6 +54,8 @@ class CsvDataProvider extends DataProviderAbstract
             unset($lines[$key]);
         }
 
+        array_walk_recursive($data, 'trim');
+
         return $data;
     }
 
