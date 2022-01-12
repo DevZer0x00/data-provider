@@ -106,6 +106,9 @@ class CsvDataProvider extends DataProviderAbstract
 
         $arrayDataProvider = new ArrayDataProvider([
             'originalData' => $this->parseData(),
+            'filter' => $this->filter,
+            'sorter' => $this->sorter,
+            'paginator' => $this->paginator,
         ]);
 
         $this->data = $arrayDataProvider->getData();

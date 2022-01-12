@@ -22,8 +22,7 @@ final class CsvDataProviderTest extends TestCase
     4; mamed; mamed_value \r
     3; ibragim; ibragim_value \r
     6; boris_britva; boris_britva_value \r
-    5; cigan; cigan_value \r
-    7; test; test_value \r";
+    5; cigan; cigan_value \r";
 
     private const ORIGINAL_CSV_ARRAY = [
         ['id' => '2', 'name' => 'ahmed', 'value' => 'ahmed_value'],
@@ -31,7 +30,6 @@ final class CsvDataProviderTest extends TestCase
         ['id' => '3', 'name' => 'ibragim', 'value' => 'ibragim_value'],
         ['id' => '6', 'name' => 'boris_britva', 'value' => 'boris_britva_value'],
         ['id' => '5', 'name' => 'cigan', 'value' => 'cigan_value'],
-        ['id' => '7', 'name' => 'test', 'value' => 'test_value'],
     ];
 
     private function createStream(string $data, bool $first = true)
@@ -97,7 +95,8 @@ final class CsvDataProviderTest extends TestCase
         $stream = $this->createStream(self::TEST_CSV_DATA);
         $provider->setSourceStream($stream);
         $provider->getPaginator()->setPageSize(1);
-        $this->assertEquals(self::ORIGINAL_CSV_ARRAY, $provider->getData());
+
+        $this->assertEquals([self::ORIGINAL_CSV_ARRAY[0]], $provider->getData());
 
         $stream = $this->createStream(self::TEST_CSV_DATA);
         $provider->setSourceStream($stream);
@@ -105,7 +104,10 @@ final class CsvDataProviderTest extends TestCase
 
         $this->assertCount(0, $provider->getData());
 
-        /*$provider->getPaginator()->setCurrentPage(3)->setPageSize(2);
-        $this->assertEquals([end($originalData)], $provider->getData());*/
+        $stream = $this->createStream(self::TEST_CSV_DATA);
+        $provider->setSourceStream($stream);
+        $provider->getPaginator()->setCurrentPage(3)->setPageSize(2);
+
+        $this->assertEquals([self::ORIGINAL_CSV_ARRAY[4]], $provider->getData());
     }
 }
