@@ -34,6 +34,8 @@ class CsvDataProvider extends DataProviderAbstract
         $lines = array_map('trim', $lines);
 
         $titles = str_getcsv($lines[0], $this->colDelimiter);
+        $titles = array_map('trim', $titles);
+
         $columnCount = count($titles);
         unset($lines[0]);
         $lines = array_values($lines);
@@ -48,13 +50,15 @@ class CsvDataProvider extends DataProviderAbstract
             }
 
             foreach ($lineArr as $index => $columnValue) {
-                $data[$key][trim($titles[$index])] = trim($columnValue);
+                $data[$key][$titles[$index]] = $columnValue;
             }
 
             unset($lines[$key]);
         }
 
-        array_walk_recursive($data, 'trim');
+        array_walk_recursive($data, function (&$field): void {
+            $field = trim($field);
+        });
 
         return $data;
     }
