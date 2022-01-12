@@ -163,4 +163,39 @@ final class CsvDataProviderTest extends TestCase
 
         $this->assertCount(0, $provider->getData());
     }
+
+    public function testSorterGetData(): void
+    {
+        $sorter = new Sorter();
+        $sorter->setColumnCollection(new Sorter\ColumnCollection());
+
+        $stream = $this->createStream(self::TEST_CSV_DATA);
+
+        $provider = new CsvDataProvider([
+            'sorter' => $sorter,
+            'sourceStream' => $stream,
+        ]);
+
+        $this->assertEquals(self::ORIGINAL_CSV_ARRAY, $provider->getData());
+
+        $column = new Sorter\Column('id');
+        $column->setDirection(Sorter::SORT_DESC);
+        $sorter->setColumnCollection(new Sorter\ColumnCollection([$column]));
+        $stream = $this->createStream(self::TEST_CSV_DATA);
+
+        $provider = new CsvDataProvider([
+            'sorter' => $sorter,
+            'sourceStream' => $stream,
+        ]);
+
+        $arr = [
+            ['id' => '6', 'name' => 'boris_britva', 'value' => '250'],
+            ['id' => '5', 'name' => 'cigan', 'value' => '300'],
+            ['id' => '4', 'name' => 'mamed', 'value' => '150'],
+            ['id' => '3', 'name' => 'ibragim', 'value' => '200'],
+            ['id' => '2', 'name' => 'ahmed', 'value' => '100'],
+        ];
+
+        $this->assertEquals($arr, $provider->getData());
+    }
 }
