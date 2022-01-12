@@ -145,19 +145,22 @@ final class CsvDataProviderTest extends TestCase
         $provider->setSourceStream($stream);
 
         $valueCriteria = new ValueCriteria();
-        $valueCriteria->setMinValue(30);
+        $valueCriteria->setMinValue(190);
 
         $provider->getFilter()->getCriteriaCollection()->addCriteria($valueCriteria);
 
         $this->assertEquals(
             [
-                self::ORIGINAL_CSV_ARRAY[4],
+                self::ORIGINAL_CSV_ARRAY[2],
             ],
             $provider->getData()
         );
 
-        /*$valueCriteria->setMaxValue(160);
+        $stream = $this->createStream(self::TEST_CSV_DATA);
+        $provider->setSourceStream($stream);
 
-        $this->assertCount(0, $provider->getData());*/
+        $valueCriteria->setMaxValue(160);
+
+        $this->assertCount(0, $provider->getData());
     }
 }
