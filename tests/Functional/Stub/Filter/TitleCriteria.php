@@ -7,13 +7,13 @@ namespace DevZer0x00\DataProvider\Tests\Functional\Stub\Filter;
 use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use Doctrine\Common\Collections\Criteria;
 
-class NameCriteria extends CriteriaAbstract
+class TitleCriteria extends CriteriaAbstract
 {
     private ?string $value;
 
     public function __construct()
     {
-        parent::__construct('name');
+        parent::__construct('title');
     }
 
     public function getValue(): ?string
@@ -35,7 +35,7 @@ class NameCriteria extends CriteriaAbstract
         $criteria = new Criteria();
 
         if (!empty($this->value)) {
-            $criteria->where($criteria::expr()->eq('name', $this->getValue()));
+            $criteria->where($criteria::expr()->contains('title', $this->getValue()));
         }
 
         return $criteria;

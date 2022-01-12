@@ -13,9 +13,9 @@ class PriceCriteria extends CriteriaAbstract
 
     private ?float $maxPrice;
 
-    public function __construct()
+    public function __construct(string $field = 'price')
     {
-        parent::__construct('price');
+        parent::__construct($field);
     }
 
     public function getMinPrice(): ?float
@@ -51,11 +51,11 @@ class PriceCriteria extends CriteriaAbstract
         $criteria = new Criteria();
 
         if (!empty($this->minPrice)) {
-            $criteria->andWhere($criteria::expr()->gte('price', $this->minPrice));
+            $criteria->andWhere($criteria::expr()->gte($this->getName(), $this->minPrice));
         }
 
         if (!empty($this->maxPrice)) {
-            $criteria->andWhere($criteria::expr()->lte('price', $this->maxPrice));
+            $criteria->andWhere($criteria::expr()->lte($this->getName(), $this->maxPrice));
         }
 
         return $criteria;
