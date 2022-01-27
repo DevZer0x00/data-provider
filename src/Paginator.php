@@ -37,6 +37,10 @@ class Paginator implements SplSubject
             ->setAllowedValues('currentPage', fn ($value) => $value >= 1)
             ->setAllowedValues('totalCount', fn ($value) => $value >= 0);
 
+        $resolver->setDefaults([
+            'currentPage' => 1,
+        ]);
+
         return $resolver;
     }
 

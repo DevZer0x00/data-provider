@@ -11,9 +11,9 @@ class NameCriteria extends CriteriaAbstract
 {
     private ?string $value;
 
-    public function __construct()
+    public function __construct(string $fieldName = 'name')
     {
-        parent::__construct('name');
+        parent::__construct($fieldName);
     }
 
     public function getValue(): ?string
@@ -35,7 +35,7 @@ class NameCriteria extends CriteriaAbstract
         $criteria = new Criteria();
 
         if (!empty($this->value)) {
-            $criteria->where($criteria::expr()->eq('name', $this->getValue()));
+            $criteria->where($criteria::expr()->eq($this->getName(), $this->getValue()));
         }
 
         return $criteria;
