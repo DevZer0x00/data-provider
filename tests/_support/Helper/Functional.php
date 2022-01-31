@@ -6,12 +6,17 @@ namespace DevZer0x00\DataProvider\Tests\Helper;
 
 use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilder;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Tools\Setup;
 
 class Functional extends \Codeception\Module
 {
     public static function _createEntityManager(): EntityManager
     {
+        $driver = new AttributeDriver([__DIR__ . '/../../Functional/Stub/Entity']);
+        $config = Setup::createConfiguration(true);
+        $config->setMetadataDriverImpl($driver);
+
         return EntityManager::create(
             [
                 'driver' => 'pdo_mysql',
@@ -20,7 +25,7 @@ class Functional extends \Codeception\Module
                 'password' => 'pass',
                 'dbname' => 'test',
             ],
-            Setup::createAnnotationMetadataConfiguration([], true)
+            $config
         );
     }
 

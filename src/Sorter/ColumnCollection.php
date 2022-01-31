@@ -12,6 +12,9 @@ use IteratorAggregate;
 use SplObserver;
 use SplSubject;
 
+/**
+ * @TODO доделать column priority при множественных полях сортировки
+ */
 class ColumnCollection implements Countable, IteratorAggregate, SplObserver, SplSubject
 {
     use ObserverableTrait;

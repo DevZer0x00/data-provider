@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace DevZer0x00\DataProvider\Doctrine;
 
 use DevZer0x00\DataProvider\DataProviderAbstract;
-use DevZer0x00\DataProvider\Doctrine\DbalDataProvider\QueryBuilderCriteriaProcessor;
-use DevZer0x00\DataProvider\Doctrine\DbalDataProvider\SqlExpressionVisitor;
+use DevZer0x00\DataProvider\Filter\CriteriaAbstract;
 use DevZer0x00\DataProvider\Sorter\Column;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DbalDataProvider extends DataProviderAbstract
+class DqlDataProvider extends DataProviderAbstract
 {
     private QueryBuilder $queryBuilder;
 
@@ -60,12 +60,23 @@ class DbalDataProvider extends DataProviderAbstract
         }
 
         if ($filter = $this->getFilter()) {
-            $criteriaProcessor = new QueryBuilderCriteriaProcessor($qb, new SqlExpressionVisitor($qb));
-            $criteriaProcessor->processCollection($filter->getCriteriaCollection());
+            $criteria = new Criteria();
+
+            /** @var CriteriaAbstract $filterCriteria */
+            foreach ($filter->getCriteriaCollection() as $filterCriteria) {
+                $criteriaExpr = $filterCriteria->getCriteria()->getWhereExpression();
+
+                if ($criteriaExpr === null) {
+                    continue;
+                }
+
+                $criteria->andWhere($criteriaExpr);
+            }
+
+            $qb->addCriteria($criteria);
         }
 
-        $this->data = $qb->executeQuery()
-            ->fetchAllAssociative();
+        $this->data = $qb->getQuery()->getResult();
 
         return $this;
     }
