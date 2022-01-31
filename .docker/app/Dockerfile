@@ -38,4 +38,4 @@ RUN chown www-data:www-data /var/www/.composer
 
 USER www-data
 
-#ENTRYPOINT [ "/bin/sh", "/entrypoint.sh"]
+ENTRYPOINT [ "/bin/sh", "/entrypoint.sh"]
