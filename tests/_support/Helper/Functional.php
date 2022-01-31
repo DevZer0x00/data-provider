@@ -15,7 +15,7 @@ class Functional extends \Codeception\Module
         return EntityManager::create(
             [
                 'driver' => 'pdo_mysql',
-                'host' => 'dataprovider-mysql',
+                'host' => 'dataprovider_mysql',
                 'user' => 'user',
                 'password' => 'pass',
                 'dbname' => 'test',
