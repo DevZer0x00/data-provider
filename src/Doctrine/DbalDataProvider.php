@@ -35,6 +35,8 @@ class DbalDataProvider extends DataProviderAbstract
             return $this;
         }
 
+        $this->initialized = true;
+
         $qb = clone $this->queryBuilder;
 
         if ($sorter = $this->getSorter()) {
