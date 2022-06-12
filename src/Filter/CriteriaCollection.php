@@ -27,6 +27,11 @@ class CriteriaCollection implements Countable, IteratorAggregate, SplObserver, S
         }
     }
 
+    public function findByHash(string $hash): ?CriteriaAbstract
+    {
+        return $this->criteria[$hash] ?? null;
+    }
+
     public function addCriteria(CriteriaAbstract $criteriaAbstract): self
     {
         if (isset($this->criteria[$criteriaAbstract->getCriteriaHash()])) {

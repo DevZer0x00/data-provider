@@ -17,10 +17,13 @@ abstract class CriteriaAbstract implements SplSubject
 
     private string $prefix;
 
-    public function __construct(string $name, string $prefix = '')
+    private ?string $criteriaHash;
+
+    public function __construct(string $name, string $prefix = '', ?string $criteriaHash = null)
     {
         $this->name = $name;
         $this->prefix = $prefix;
+        $this->criteriaHash = $criteriaHash;
     }
 
     public function getName(): string
@@ -30,7 +33,11 @@ abstract class CriteriaAbstract implements SplSubject
 
     public function getCriteriaHash(): string
     {
-        return $this->prefix . '.' . $this->name;
+        if (empty($this->criteriaHash)) {
+            $this->criteriaHash = $this->prefix . '.' . $this->name;
+        }
+
+        return $this->criteriaHash;
     }
 
     abstract public function getCriteria(): Criteria;
