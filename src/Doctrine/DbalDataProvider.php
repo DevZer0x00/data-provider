@@ -56,14 +56,21 @@ class DbalDataProvider extends DataProviderAbstract
             }
         }
 
-        if ($paginator = $this->getPaginator()) {
-            $qb->setMaxResults($paginator->getPageSize())
-                ->setFirstResult($this->getResultOffset());
-        }
-
         if ($filter = $this->getFilter()) {
             $criteriaProcessor = new QueryBuilderCriteriaProcessor($qb, new SqlExpressionVisitor($qb));
             $criteriaProcessor->processCollection($filter->getCriteriaCollection());
+        }
+
+        if ($paginator = $this->getPaginator()) {
+            $totalCountQb = clone $qb;
+            $totalCountQb->resetQueryPart('select');
+            $totalCountQb->select('count(*)');
+            $totalCount = (int)$totalCountQb->fetchOne();
+
+            $this->getPaginator()->setTotalCount($totalCount);
+
+            $qb->setMaxResults($paginator->getPageSize())
+                ->setFirstResult($this->getResultOffset());
         }
 
         $this->data = $qb->executeQuery()

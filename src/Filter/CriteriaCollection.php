@@ -29,14 +29,14 @@ class CriteriaCollection implements Countable, IteratorAggregate, SplObserver, S
 
     public function addCriteria(CriteriaAbstract $criteriaAbstract): self
     {
-        if (isset($this->criteria[$criteriaAbstract->getName()])) {
+        if (isset($this->criteria[$criteriaAbstract->getCriteriaHash()])) {
             throw new NonUniqueCriteriaException(
-                sprintf('Criteria with name - %s already exists', $criteriaAbstract->getName())
+                sprintf('Criteria with hash - %s already exists', $criteriaAbstract->getCriteriaHash())
             );
         }
 
         $criteriaAbstract->attach($this);
-        $this->criteria[$criteriaAbstract->getName()] = $criteriaAbstract;
+        $this->criteria[$criteriaAbstract->getCriteriaHash()] = $criteriaAbstract;
 
         $this->notify();
 

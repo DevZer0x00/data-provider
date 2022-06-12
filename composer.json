@@ -54,7 +54,8 @@
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",
         "codeception/codeception": "5.0.x-dev",
-        "friendsofphp/php-cs-fixer": "^3.4",
-        "codeception/module-doctrine2": "^3.0"
+        "codeception/module-asserts": "^3.0",
+        "codeception/module-doctrine2": "^3.0",
+        "friendsofphp/php-cs-fixer": "^3.4"
     }
 }

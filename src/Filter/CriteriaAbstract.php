@@ -15,14 +15,22 @@ abstract class CriteriaAbstract implements SplSubject
 
     private string $name;
 
-    public function __construct(string $name)
+    private string $prefix;
+
+    public function __construct(string $name, string $prefix = '')
     {
         $this->name = $name;
+        $this->prefix = $prefix;
     }
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getCriteriaHash(): string
+    {
+        return $this->prefix . '.' . $this->name;
     }
 
     abstract public function getCriteria(): Criteria;
