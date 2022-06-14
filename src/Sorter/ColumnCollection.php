@@ -11,6 +11,7 @@ use DevZer0x00\DataProvider\Traits\ObserverableTrait;
 use IteratorAggregate;
 use SplObserver;
 use SplSubject;
+use function count;
 
 /**
  * @TODO доделать column priority при множественных полях сортировки
@@ -34,9 +35,7 @@ class ColumnCollection implements Countable, IteratorAggregate, SplObserver, Spl
     public function add(Column $column): void
     {
         if (isset($this->columns[$column->getName()])) {
-            throw new NonUniqueColumnException(
-                sprintf('Column with name - %s already exists', $column->getName())
-            );
+            throw new NonUniqueColumnException(sprintf('Column with name - %s already exists', $column->getName()));
         }
 
         $column->attach($this);

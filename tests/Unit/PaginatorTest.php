@@ -8,6 +8,7 @@ use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Exception\ConfigException;
 use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Paginator;
+use SplObserver;
 use Throwable;
 
 /**
@@ -139,7 +140,7 @@ final class PaginatorTest extends Unit
 
     public function testEvents(): void
     {
-        $observer = $this->createMock(\SplObserver::class);
+        $observer = $this->createMock(SplObserver::class);
 
         $observer->expects($this->any())
             ->method('update')

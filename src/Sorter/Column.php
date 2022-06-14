@@ -8,6 +8,9 @@ use DevZer0x00\DataProvider\Exception\InvalidArgumentException;
 use DevZer0x00\DataProvider\Sorter;
 use DevZer0x00\DataProvider\Traits\ObserverableTrait;
 use SplSubject;
+use function count;
+use function in_array;
+use function is_int;
 
 class Column implements SplSubject
 {

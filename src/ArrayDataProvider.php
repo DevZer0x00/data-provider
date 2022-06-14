@@ -9,6 +9,11 @@ use DevZer0x00\DataProvider\Sorter\Column;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function array_slice;
+use function count;
+use const SORT_ASC;
+use const SORT_DESC;
+use const SORT_NUMERIC;
 
 class ArrayDataProvider extends DataProviderAbstract
 {

@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Expr\ExpressionVisitor;
 use Doctrine\Common\Collections\Expr\Value;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use function is_array;
 
 class SqlExpressionVisitor extends ExpressionVisitor
 {

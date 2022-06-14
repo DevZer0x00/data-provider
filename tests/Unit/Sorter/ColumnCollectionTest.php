@@ -8,6 +8,7 @@ use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Exception\NonUniqueColumnException;
 use DevZer0x00\DataProvider\Sorter\Column;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
+use SplObserver;
 
 /**
  * @internal
@@ -101,7 +102,7 @@ final class ColumnCollectionTest extends Unit
     {
         $collection = new ColumnCollection();
 
-        $observer = $this->createMock(\SplObserver::class);
+        $observer = $this->createMock(SplObserver::class);
         $observer->expects($this->once())->method('update')->with(
             $this->callback(function (ColumnCollection $collection) {
                 $this->assertCount(1, $collection);

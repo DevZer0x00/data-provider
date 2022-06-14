@@ -7,6 +7,7 @@ namespace DevZer0x00\DataProvider\Tests\Unit;
 use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Filter;
 use DevZer0x00\DataProvider\Filter\CriteriaCollection;
+use SplObserver;
 
 /**
  * @internal
@@ -32,7 +33,7 @@ final class FilterTest extends Unit
     {
         $filter = new Filter();
 
-        $observer = $this->createMock(\SplObserver::class);
+        $observer = $this->createMock(SplObserver::class);
         $observer->expects($this->exactly(2))->method('update');
 
         $filter->attach($observer);

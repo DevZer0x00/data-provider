@@ -11,6 +11,7 @@ use DevZer0x00\DataProvider\Traits\ObserverableTrait;
 use IteratorAggregate;
 use SplObserver;
 use SplSubject;
+use function count;
 
 class CriteriaCollection implements Countable, IteratorAggregate, SplObserver, SplSubject
 {
@@ -35,9 +36,7 @@ class CriteriaCollection implements Countable, IteratorAggregate, SplObserver, S
     public function addCriteria(CriteriaAbstract $criteriaAbstract): self
     {
         if (isset($this->criteria[$criteriaAbstract->getCriteriaHash()])) {
-            throw new NonUniqueCriteriaException(
-                sprintf('Criteria with hash - %s already exists', $criteriaAbstract->getCriteriaHash())
-            );
+            throw new NonUniqueCriteriaException(sprintf('Criteria with hash - %s already exists', $criteriaAbstract->getCriteriaHash()));
         }
 
         $criteriaAbstract->attach($this);

@@ -7,6 +7,7 @@ namespace DevZer0x00\DataProvider\Tests\Unit;
 use Codeception\Test\Unit;
 use DevZer0x00\DataProvider\Sorter;
 use DevZer0x00\DataProvider\Sorter\ColumnCollection;
+use SplObserver;
 
 /**
  * @internal
@@ -54,7 +55,7 @@ final class SorterTest extends Unit
             'multiSortable' => false,
         ]);
 
-        $observer = $this->createMock(\SplObserver::class);
+        $observer = $this->createMock(SplObserver::class);
         $observer->expects($this->exactly(4))->method('update');
 
         $sorter->attach($observer);

@@ -13,6 +13,7 @@ use DevZer0x00\DataProvider\Filter\CriteriaCollection;
 use DevZer0x00\DataProvider\Paginator;
 use DevZer0x00\DataProvider\Sorter;
 use Doctrine\Common\Collections\Criteria;
+use function count;
 
 /**
  * @internal

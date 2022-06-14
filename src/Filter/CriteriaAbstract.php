@@ -40,5 +40,14 @@ abstract class CriteriaAbstract implements SplSubject
         return $this->criteriaHash;
     }
 
+    public function getFieldName(): string
+    {
+        if (!empty($this->prefix)) {
+            return sprintf('%s.%s', $this->prefix, $this->name);
+        }
+
+        return $this->name;
+    }
+
     abstract public function getCriteria(): Criteria;
 }

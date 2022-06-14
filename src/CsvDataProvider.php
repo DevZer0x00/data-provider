@@ -7,6 +7,7 @@ namespace DevZer0x00\DataProvider;
 use DevZer0x00\DataProvider\Exception\ColumnCountException;
 use DevZer0x00\DataProvider\Exception\ReadStreamErrorException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function count;
 
 class CsvDataProvider extends DataProviderAbstract
 {
