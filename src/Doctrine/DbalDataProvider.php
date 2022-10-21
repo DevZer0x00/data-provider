@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DbalDataProvider extends DataProviderAbstract
 {
-    private QueryBuilder $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
     protected function configureOptions(OptionsResolver $resolver): OptionsResolver
     {
@@ -61,6 +61,16 @@ class DbalDataProvider extends DataProviderAbstract
             $criteriaProcessor->processCollection($filter->getCriteriaCollection());
         }
 
+        $this->calculateTotalCount($qb);
+
+        $this->data = $qb->executeQuery()
+            ->fetchAllAssociative();
+
+        return $this;
+    }
+
+    protected function calculateTotalCount($qb): void
+    {
         if ($paginator = $this->getPaginator()) {
             $totalCountQb = clone $qb;
             $totalCountQb->resetQueryPart('select');
@@ -72,11 +82,6 @@ class DbalDataProvider extends DataProviderAbstract
             $qb->setMaxResults($paginator->getPageSize())
                 ->setFirstResult($this->getResultOffset());
         }
-
-        $this->data = $qb->executeQuery()
-            ->fetchAllAssociative();
-
-        return $this;
     }
 
     private function getResultOffset(): int

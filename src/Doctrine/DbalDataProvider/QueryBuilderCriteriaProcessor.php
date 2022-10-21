@@ -16,13 +16,29 @@ class QueryBuilderCriteriaProcessor
 
     public function process(CriteriaAbstract $filterCriteria): void
     {
-        $criteriaExpr = $filterCriteria->getCriteria()->getWhereExpression();
+        $whereCriteria = $filterCriteria->getCriteria();
 
-        if ($criteriaExpr === null) {
-            return;
+        if ($whereCriteria !== null) {
+            $criteriaExpr = $whereCriteria->getWhereExpression();
+
+            if ($criteriaExpr === null) {
+                return;
+            }
+
+            $this->builder->andWhere($this->expressionVisitor->dispatch($criteriaExpr));
         }
 
-        $this->builder->andWhere($this->expressionVisitor->dispatch($criteriaExpr));
+        $havingCriteria = $filterCriteria->getHavingCriteria();
+
+        if ($havingCriteria !== null) {
+            $criteriaExpr = $havingCriteria->getWhereExpression();
+
+            if ($criteriaExpr === null) {
+                return;
+            }
+
+            $this->builder->andHaving($this->expressionVisitor->dispatch($criteriaExpr));
+        }
     }
 
     public function processCollection(CriteriaCollection $collection): void

@@ -49,5 +49,10 @@ abstract class CriteriaAbstract implements SplSubject
         return $this->name;
     }
 
-    abstract public function getCriteria(): Criteria;
+    abstract public function getCriteria(): ?Criteria;
+
+    public function getHavingCriteria(): ?Criteria
+    {
+        return null;
+    }
 }
