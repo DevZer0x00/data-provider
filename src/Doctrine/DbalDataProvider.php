@@ -56,11 +56,6 @@ class DbalDataProvider extends DataProviderAbstract
             }
         }
 
-        if ($paginator = $this->getPaginator()) {
-            $qb->setMaxResults($paginator->getPageSize())
-                ->setFirstResult($this->getResultOffset());
-        }
-
         if ($filter = $this->getFilter()) {
             $criteriaProcessor = new QueryBuilderCriteriaProcessor($qb, new SqlExpressionVisitor($qb));
             $criteriaProcessor->processCollection($filter->getCriteriaCollection());
