@@ -84,7 +84,7 @@ class DbalDataProvider extends DataProviderAbstract
         }
     }
 
-    private function getResultOffset(): int
+    protected function getResultOffset(): int
     {
         return ($this->paginator->getCurrentPage() - 1) * $this->paginator->getPageSize();
     }
