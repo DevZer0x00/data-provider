@@ -123,4 +123,9 @@ class Paginator implements SplSubject
     {
         return (int)ceil($this->totalCount / $this->pageSize);
     }
+
+    public function getOffset(): int
+    {
+        return ($this->currentPage - 1) * $this->pageSize;
+    }
 }
